@@ -1,0 +1,564 @@
+/* Credits.css - File completo */
+
+/* Titolo principale */
+.credits-title {
+  text-align: center;
+  color: #1f2937 !important;
+  margin: 0 0 15px 0 !important;
+  font-size: 3rem !important;
+  font-weight: 900 !important;
+  letter-spacing: -0.5px !important;
+}
+
+/* Se ancora non funziona, prova con classe più specifica */
+.content-section .credits-title {
+  text-align: center;
+  color: #1f2937;
+  margin: 0 0 15px 0;
+  font-size: 3rem;
+  font-weight: 900;
+  letter-spacing: -0.5px;
+  line-height: 1.2;
+}
+
+/* Subtitle */
+.credits-subtitle {
+  text-align: center;
+  color: #667eea;
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin: -10px 0 30px 0;
+}
+
+/* Nuovo container per il layout ristrutturato */
+.credits-new-container {
+  max-width: 1200px;
+  margin: 0 auto 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+/* Riga per chi siamo e funzionalità */
+.credits-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+/* Card metà larghezza */
+.credit-card-half {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e5e7eb;
+  transition: all 0.3s ease;
+}
+
+.credit-card-half:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  border-color: #667eea;
+}
+
+/* Card larghezza piena */
+.credit-card-full {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e5e7eb;
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.credit-card-full:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  border-color: #667eea;
+}
+
+/* Stili per i titoli delle card */
+.credit-card-half h3,
+.credit-card-full h3 {
+  color: #667eea;
+  margin-bottom: 15px;
+  font-size: 1.3rem;
+}
+
+.credit-card-half p {
+  color: #4b5563;
+  line-height: 1.6;
+  margin-bottom: 10px;
+}
+
+.credit-card-half ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.credit-card-half li {
+  padding: 8px 0;
+  color: #374151;
+  font-weight: 500;
+  position: relative;
+  padding-left: 20px;
+}
+
+.credit-card-half li:before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: #667eea;
+  font-weight: bold;
+}
+
+/* Testo evidenziato */
+.highlight-text {
+  background: #fef3c7;
+  padding: 8px 12px;
+  border-radius: 6px;
+  display: inline-block;
+  margin-top: 10px;
+}
+
+.highlight-text strong {
+  color: #f59e0b;
+}
+
+/* Sviluppatori - nuovo layout 2x2 */
+.developers-card-new h3 {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.developers-grid-new {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 30px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.developer-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: #374151;
+  padding: 15px;
+  border-radius: 10px;
+  background: #f8f9fa;
+  transition: all 0.3s ease;
+  position: relative;
+  border: 2px solid transparent;
+}
+
+.developer-link:hover {
+  background: #e5e7eb;
+  border-color: #667eea;
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+}
+
+.developer-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-bottom: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border: 3px solid #e5e7eb;
+  transition: all 0.3s ease;
+}
+
+.developer-link:hover .developer-avatar {
+  border-color: #667eea;
+}
+
+.developer-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.avatar-placeholder {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.developer-name {
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-align: center;
+  margin-bottom: 5px;
+  color: #1f2937;
+}
+
+.linkedin-icon {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  color: #0077b5;
+}
+
+.linkedin-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.developer-link:hover .linkedin-icon {
+  opacity: 1;
+}
+
+/* Social - layout griglia 2x2 */
+.social-card-new h3 {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.social-links-new {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  max-width: 500px;
+  margin: 0 auto;
+  justify-items: center;
+}
+
+.social-link-new {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 25px;
+  background: #f8f9fa;
+  border-radius: 12px;
+  text-decoration: none;
+  color: #374151;
+  transition: all 0.3s ease;
+  width: 100%;
+  min-width: 180px;
+  max-width: 220px;
+  border: 2px solid transparent;
+  text-align: center;
+}
+
+.social-link-new:hover {
+  background: #e5e7eb;
+  border-color: #667eea;
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+}
+
+.social-icon-new {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #667eea;
+  flex-shrink: 0;
+}
+
+.social-icon-new svg {
+  width: 36px;
+  height: 36px;
+}
+
+.social-name-new {
+  font-weight: 600;
+  font-size: 1rem;
+  color: #1f2937;
+  text-align: center;
+  line-height: 1.2;
+}
+
+/* Hover colors per social */
+.social-link-new:hover .social-icon-new {
+  color: #4c1d95;
+}
+
+/* Colori specifici per ogni social network su hover */
+.social-link-new:nth-child(1):hover .social-icon-new {
+  color: #667eea; /* Sito web */
+}
+
+.social-link-new:nth-child(2):hover .social-icon-new {
+  color: #1877f2; /* Facebook */
+}
+
+.social-link-new:nth-child(3):hover .social-icon-new {
+  color: #ff0000; /* YouTube */
+}
+
+.social-link-new:nth-child(4):hover .social-icon-new {
+  color: #e4405f; /* Instagram */
+}
+
+/* Responsive per social */
+@media (max-width: 768px) {
+  .social-links-new {
+    max-width: 400px;
+    gap: 15px;
+  }
+  
+  .social-link-new {
+    min-width: 150px;
+    max-width: 180px;
+    padding: 20px;
+  }
+  
+  .social-icon-new {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .social-icon-new svg {
+    width: 30px;
+    height: 30px;
+  }
+  
+  .social-name-new {
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .social-links-new {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    max-width: 100%;
+    padding: 0 10px;
+  }
+  
+  .social-link-new {
+    min-width: 120px;
+    max-width: 160px;
+    padding: 15px 10px;
+  }
+  
+  .social-icon-new {
+    width: 36px;
+    height: 36px;
+  }
+  
+  .social-icon-new svg {
+    width: 28px;
+    height: 28px;
+  }
+  
+  .social-name-new {
+    font-size: 0.85rem;
+  }
+}
+
+/* Extra small devices */
+@media (max-width: 360px) {
+  .social-links-new {
+    grid-template-columns: 1fr;
+    max-width: 200px;
+  }
+  
+  .social-link-new {
+    max-width: 200px;
+  }
+}
+/* Copyright semplice */
+.copyright-simple {
+  text-align: center;
+  padding: 30px 20px;
+  background: #f3f4f6;
+  border-radius: 12px;
+  margin-top: 40px;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.copyright-simple p {
+  margin: 5px 0;
+  color: #4b5563;
+  font-size: 0.95rem;
+}
+
+.copyright-simple p:first-child {
+  font-weight: 700;
+  color: #1f2937;
+  font-size: 1.1rem;
+}
+
+.hashtags-simple {
+  margin-top: 15px !important;
+  color: #667eea !important;
+  font-weight: 600 !important;
+}
+
+/* Fix per l'allineamento globale */
+.content-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding: 20px;
+}
+
+.content-section > * {
+  width: 100%;
+  max-width: 1200px;
+}
+
+/* Responsive */
+@media (max-width: 968px) {
+  .credits-row {
+    grid-template-columns: 1fr;
+  }
+  
+  .developers-grid-new {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .credits-title {
+    font-size: 2.2rem !important;
+  }
+  
+  .credits-subtitle {
+    font-size: 1.1rem;
+  }
+  
+  .credits-new-container {
+    gap: 20px;
+    padding: 0 15px;
+  }
+  
+  .credit-card-half,
+  .credit-card-full {
+    padding: 25px;
+  }
+  
+  .developers-grid-new {
+    grid-template-columns: 1fr;
+    max-width: 300px;
+  }
+  
+  .social-links-new {
+    gap: 15px;
+  }
+  
+  .social-link-new {
+    min-width: 100px;
+    padding: 15px;
+  }
+  
+  .social-icon-new svg {
+    width: 28px;
+    height: 28px;
+  }
+}
+
+@media (max-width: 480px) {
+  .credits-title {
+    font-size: 1.8rem !important;
+  }
+  
+  .social-links-new {
+    grid-template-columns: repeat(2, 1fr);
+    display: grid;
+    gap: 15px;
+  }
+  
+  .social-link-new {
+    min-width: auto;
+  }
+  
+  .credit-card-half,
+  .credit-card-full {
+    padding: 20px;
+  }
+  
+  .developer-avatar {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .developer-link {
+    padding: 12px;
+  }
+}
+
+/* Dark mode support opzionale */
+@media (prefers-color-scheme: dark) {
+  .credit-card-half,
+  .credit-card-full {
+    background: #1f2937;
+    border-color: #374151;
+  }
+  
+  .credit-card-half h3,
+  .credit-card-full h3 {
+    color: #a5b4fc;
+  }
+  
+  .credit-card-half p,
+  .credit-card-half li {
+    color: #e5e7eb;
+  }
+  
+  .developer-link {
+    background: #374151;
+    color: #e5e7eb;
+  }
+  
+  .developer-link:hover {
+    background: #4b5563;
+  }
+  
+  .social-link-new {
+    background: #374151;
+    color: #e5e7eb;
+  }
+  
+  .social-link-new:hover {
+    background: #4b5563;
+  }
+  
+  .copyright-simple {
+    background: #111827;
+  }
+  
+  .copyright-simple p {
+    color: #9ca3af;
+  }
+}
+
+/* Animazioni extra */
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.credit-card-half,
+.credit-card-full {
+  animation: fadeInScale 0.6s ease-out;
+}

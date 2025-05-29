@@ -1,0 +1,199 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  background-attachment: fixed;
+}
+
+/* Wrapper principale */
+.app-wrapper {
+  min-height: 100vh;
+}
+
+/* Header fisso */
+.fixed-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  transition: all 0.3s ease;
+}
+
+.header-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 15px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-title {
+  font-size: 1.8rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin: 0;
+}
+
+/* Menu nel header */
+.fixed-header .main-menu {
+  background: transparent;
+  box-shadow: none;
+  border: none;
+  margin: 0;
+  padding: 0;
+  gap: 5px;
+}
+
+.fixed-header .menu-item {
+  background: rgba(102, 126, 234, 0.1);
+  color: #667eea;
+  padding: 8px 20px;
+  font-size: 15px;
+}
+
+.fixed-header .menu-item:hover {
+  background: rgba(102, 126, 234, 0.2);
+  transform: translateY(-1px);
+}
+
+.fixed-header .menu-item.active {
+  background: #667eea;
+  color: white;
+}
+
+/* Contenuto principale */
+.main-content {
+  padding-top: 100px; /* Spazio per l'header fisso */
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 40px;
+}
+
+.app {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* Stili FAQ */
+.faq-container {
+  display: grid;
+  gap: 20px;
+  margin-top: 30px;
+}
+
+.faq-item {
+  background: #f8f9fa;
+  padding: 25px;
+  border-radius: 12px;
+  border-left: 4px solid #667eea;
+  transition: all 0.3s ease;
+}
+
+.faq-item:hover {
+  transform: translateX(5px);
+  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+}
+
+.faq-question {
+  color: #333;
+  font-size: 1.2rem;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+.faq-answer {
+  color: #666;
+  line-height: 1.6;
+  font-size: 1rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .header-content {
+    flex-direction: column;
+    gap: 15px;
+    padding: 10px 15px;
+  }
+  
+  .header-title {
+    font-size: 1.5rem;
+  }
+  
+  .fixed-header .main-menu {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .fixed-header .menu-item {
+    padding: 6px 15px;
+    font-size: 14px;
+  }
+  
+  .main-content {
+    padding-top: 140px; /* Più spazio per header mobile */
+  }
+  
+  .app {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .fixed-header .main-menu {
+    width: 100%;
+  }
+  
+  .fixed-header .menu-item {
+    flex: 1;
+    min-width: calc(50% - 5px);
+  }
+}
+
+/* Animazione smooth scroll per header */
+@keyframes slideDown {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.fixed-header {
+  animation: slideDown 0.5s ease-out;
+}
+
+/* Effetto glass morphism per header */
+@supports (backdrop-filter: blur(10px)) {
+  .fixed-header {
+    background: rgba(255, 255, 255, 0.85);
+  }
+}

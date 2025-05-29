@@ -1,0 +1,412 @@
+/* Container principale */
+.faq-referendum-container {
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* Titolo principale */
+.faq-referendum-title {
+  text-align: center;
+  color: #1f2937;
+  margin: 0 0 30px 0;
+  font-size: 2.2rem;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+/* Sezione introduttiva */
+.faq-referendum-intro {
+  background: white;
+  border: 2px solid #667eea;
+  border-radius: 16px;
+  padding: 35px 30px;
+  margin: 0 0 30px 0;
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.1);
+}
+
+.faq-referendum-intro h2 {
+  color: #667eea;
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 0 0 15px 0;
+}
+
+.faq-referendum-intro p {
+  color: #4b5563;
+  font-size: 1.1rem;
+  line-height: 1.7;
+  margin: 0;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+/* Banner informativo */
+.faq-referendum-info-banner {
+  background: linear-gradient(to right, #e0f2fe, #dbeafe);
+  border-left: 4px solid #0284c7;
+  border-radius: 12px;
+  padding: 25px;
+  margin: 0 0 30px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.info-row {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.info-icon {
+  font-size: 1.5rem;
+  min-width: 35px;
+  text-align: center;
+}
+
+.info-content {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.info-content strong {
+  color: #0c4a6e;
+  font-size: 1.1rem;
+}
+
+.info-content span {
+  color: #075985;
+  font-size: 0.95rem;
+}
+
+/* Riepilogo quesiti */
+.faq-referendum-quesiti-summary {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 30px;
+  margin: 0 0 40px 0;
+  border-left: 5px solid #667eea;
+}
+
+.faq-referendum-quesiti-summary h3 {
+  color: #1f2937;
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin: 0 0 20px 0;
+}
+
+.faq-referendum-quesiti-list {
+  margin: 0;
+  padding-left: 25px;
+  color: #374151;
+}
+
+.faq-referendum-quesiti-list li {
+  margin-bottom: 12px;
+  line-height: 1.6;
+  font-size: 1.05rem;
+}
+
+.faq-referendum-quesiti-list strong {
+  color: #667eea;
+  font-weight: 600;
+}
+
+/* Sezione FAQ */
+.faq-referendum-faq-section {
+  display: grid;
+  gap: 18px;
+  margin: 0 0 40px 0;
+}
+
+.faq-referendum-item {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 25px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.faq-referendum-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.12);
+  border-color: #c7d2fe;
+}
+
+.faq-referendum-question {
+  color: #1f2937;
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin: 0 0 12px 0;
+  line-height: 1.4;
+}
+
+.faq-referendum-answer {
+  color: #4b5563;
+  font-size: 1rem;
+  line-height: 1.7;
+  margin: 0;
+  padding-left: 30px;
+}
+
+/* Avviso finale */
+.faq-referendum-notice {
+  background: linear-gradient(135deg, #fef3c7, #fed7aa);
+  border: 2px solid #f59e0b;
+  border-radius: 16px;
+  padding: 30px;
+  margin: 0;
+  text-align: center;
+}
+
+.faq-referendum-notice h3 {
+  color: #92400e;
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin: 0 0 20px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.faq-referendum-notice ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 20px 0;
+}
+
+.faq-referendum-notice li {
+  color: #78350f;
+  font-size: 1.05rem;
+  font-weight: 500;
+  margin-bottom: 10px;
+  padding-left: 25px;
+  position: relative;
+}
+
+.faq-referendum-notice li:before {
+  content: "•";
+  position: absolute;
+  left: 10px;
+  font-weight: bold;
+}
+
+.notice-divider {
+  height: 1px;
+  background: #fbbf24;
+  margin: 25px auto 20px;
+  width: 80%;
+}
+
+.notice-footer {
+  color: #78350f;
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+.notice-footer strong {
+  color: #92400e;
+  font-weight: 700;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .faq-referendum-title {
+    font-size: 1.8rem;
+    margin-bottom: 25px;
+  }
+  
+  .faq-referendum-intro {
+    padding: 25px 20px;
+  }
+  
+  .faq-referendum-intro h2 {
+    font-size: 1.5rem;
+  }
+  
+  .faq-referendum-intro p {
+    font-size: 1rem;
+  }
+  
+  .faq-referendum-info-banner {
+    padding: 20px;
+  }
+  
+  .info-icon {
+    font-size: 1.3rem;
+    min-width: 30px;
+  }
+  
+  .info-content strong {
+    font-size: 1rem;
+  }
+  
+  .info-content span {
+    font-size: 0.9rem;
+  }
+  
+  .faq-referendum-quesiti-summary {
+    padding: 20px;
+  }
+  
+  .faq-referendum-quesiti-summary h3 {
+    font-size: 1.2rem;
+  }
+  
+  .faq-referendum-quesiti-list {
+    padding-left: 20px;
+  }
+  
+  .faq-referendum-quesiti-list li {
+    font-size: 0.95rem;
+    margin-bottom: 10px;
+  }
+  
+  .faq-referendum-item {
+    padding: 20px;
+  }
+  
+  .faq-referendum-question {
+    font-size: 1.05rem;
+  }
+  
+  .faq-referendum-answer {
+    font-size: 0.95rem;
+    padding-left: 25px;
+  }
+  
+  .faq-referendum-notice {
+    padding: 25px 20px;
+  }
+  
+  .faq-referendum-notice h3 {
+    font-size: 1.2rem;
+  }
+  
+  .faq-referendum-notice li {
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .faq-referendum-title {
+    font-size: 1.5rem;
+  }
+  
+  .faq-referendum-intro {
+    padding: 20px 15px;
+  }
+  
+  .faq-referendum-intro h2 {
+    font-size: 1.3rem;
+  }
+  
+  .faq-referendum-info-banner {
+    padding: 15px;
+    gap: 12px;
+  }
+  
+  .info-row {
+    gap: 10px;
+  }
+  
+  .faq-referendum-quesiti-summary {
+    padding: 15px;
+  }
+  
+  .faq-referendum-item {
+    padding: 15px;
+  }
+  
+  .faq-referendum-answer {
+    padding-left: 20px;
+  }
+}
+
+/* Animazioni extra per un effetto più fluido */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.faq-referendum-intro,
+.faq-referendum-info-banner,
+.faq-referendum-quesiti-summary,
+.faq-referendum-notice {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+/* Stampa ottimizzata */
+@media print {
+  .faq-referendum-container {
+    background: white;
+  }
+  
+  .faq-referendum-item {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+  
+  .faq-referendum-intro,
+  .faq-referendum-info-banner,
+  .faq-referendum-quesiti-summary,
+  .faq-referendum-notice {
+    box-shadow: none;
+    border: 1px solid #ccc;
+  }
+}
+
+/* Accessibility - Focus states */
+.faq-referendum-item:focus-within {
+  outline: 3px solid #667eea;
+  outline-offset: 2px;
+}
+
+/* Dark mode support (opzionale) */
+@media (prefers-color-scheme: dark) {
+  .faq-referendum-container {
+    color: #f3f4f6;
+  }
+  
+  .faq-referendum-title {
+    color: #f3f4f6;
+  }
+  
+  .faq-referendum-intro {
+    background: #1f2937;
+    border-color: #4b5563;
+  }
+  
+  .faq-referendum-intro h2 {
+    color: #a5b4fc;
+  }
+  
+  .faq-referendum-intro p {
+    color: #d1d5db;
+  }
+  
+  .faq-referendum-item {
+    background: #1f2937;
+    border-color: #374151;
+  }
+  
+  .faq-referendum-question {
+    color: #f3f4f6;
+  }
+  
+  .faq-referendum-answer {
+    color: #d1d5db;
+  }
+}
