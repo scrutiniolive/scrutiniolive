@@ -21,8 +21,8 @@ const Home: React.FC = () => {
   const [referendumData, setReferendumData] = useState<VoteData[]>(
     simulatorRef.current.getCurrentData()
   );
-  const [barData, setBarData] = useState<DataItem[]>(createBarData(referendumData));
-  const [radarData, setRadarData] = useState<DataItem[]>(createRadarData(referendumData));
+  const [_barData, setBarData] = useState<DataItem[]>(createBarData(referendumData));
+  const [_radarData, setRadarData] = useState<DataItem[]>(createRadarData(referendumData));
   
   const [currentChart, setCurrentChart] = useState<ChartType>('quorum');
   const [currentQuesito, setCurrentQuesito] = useState(1);
@@ -31,8 +31,7 @@ const Home: React.FC = () => {
   
   const intervalRef = useRef<number | null>(null);
   
-  const maxBarValue = TOTAL_ABITANTI;
-  const maxRadarValue = TOTAL_ABITANTI;
+  
   const MAX_VOTERS = 8000; // Massimo numero di votanti
 
   const charts: ChartType[] = ['quorum', 'bar'];
@@ -129,17 +128,6 @@ const Home: React.FC = () => {
     }
   };
 
-  const getQuesitoFullName = (name: string) => {
-    const mapping: { [key: string]: string } = {
-      'Q1': 'Trasporto Pubblico',
-      'Q2': 'Raccolta Differenziata',
-      'Q3': 'Zone Pedonali',
-      'Q4': 'Piste Ciclabili',
-      'Q5': 'Verde Pubblico'
-    };
-    const qNumber = name.split(' - ')[0];
-    return mapping[qNumber] || '';
-  };
 
   return (
     <motion.div
@@ -168,7 +156,7 @@ const Home: React.FC = () => {
       </div>
 
       <div className="chart-indicator">
-        {charts.map((chart, index) => (
+        {charts.map((chart, _) => (
           <span
             key={chart}
             className={`indicator-dot ${chart === currentChart ? 'active' : ''}`}

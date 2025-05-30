@@ -918,32 +918,6 @@ body {
   background: #555;
 }
 
-/* Dark mode support (opzionale) */
-@media (prefers-color-scheme: dark) {
-  body {
-    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-  }
-  
-  .app {
-    background: rgba(30, 30, 30, 0.95);
-    color: #f0f0f0;
-  }
-  
-  .title {
-    color: #f0f0f0;
-  }
-  
-  .fixed-header {
-    background: rgba(30, 30, 30, 0.95);
-  }
-  
-  .credit-card,
-  .poll-card,
-  .faq-item {
-    background: #2a2a2a;
-    color: #f0f0f0;
-  }
-}
 
 /* Header brand group */
 .header-brand {

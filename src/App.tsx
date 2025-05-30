@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import  { useState } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import Menu from './components/Menu/Menu';
 import Home from './pages/Home/Home';
@@ -37,7 +37,7 @@ function App() {
     <div className="header-content">
       <div className="header-brand">
         <img 
-          src="/images/scrutinio_live.png" 
+         src={`${import.meta.env.BASE_URL}images/scrutinio_live.png`}
           alt="ScrutinioLive Logo" 
           className="header-logo"
         />

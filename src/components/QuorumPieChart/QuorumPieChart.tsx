@@ -56,8 +56,6 @@ const QuorumPieChart: React.FC<QuorumPieChartProps> = ({
   
   // Calcola la posizione della linea del quorum
   const quorumAngle = (quorumPercentage / 100) * 2 * Math.PI - Math.PI / 2;
-  const quorumX1 = centerX + (radius - strokeWidth/2) * Math.cos(quorumAngle);
-  const quorumY1 = centerY + (radius - strokeWidth/2) * Math.sin(quorumAngle);
   const quorumX2 = centerX + (radius + strokeWidth/2) * Math.cos(quorumAngle);
   const quorumY2 = centerY + (radius + strokeWidth/2) * Math.sin(quorumAngle);
 
