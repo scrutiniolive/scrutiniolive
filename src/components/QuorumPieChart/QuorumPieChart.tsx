@@ -1,260 +1,424 @@
 import React, { useMemo, useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useMotionValue, useTransform, animate } from 'framer-motion';
 import type { VoteData } from '../../types';
 import './QuorumPieChart.css';
 
 interface QuorumPieChartProps {
-  data: VoteData[];
-  totalAbitanti: number;
-  quorumPercentage: number;
-  currentQuesito: number;
-  onQuesitoChange: (quesito: number) => void;
+    data: VoteData[];
+    totalAbitanti: number;
+    quorumPercentage: number;
+    currentQuesito: number;
+    onQuesitoChange: (quesito: number) => void;
 }
 
-const QuorumPieChart: React.FC<QuorumPieChartProps> = ({ 
-  data, 
-  totalAbitanti, 
-  quorumPercentage,
-  currentQuesito,
-  onQuesitoChange
+const QuorumPieChart: React.FC<QuorumPieChartProps> = ({
+    data,
+    totalAbitanti,
+    quorumPercentage,
+    currentQuesito,
+    onQuesitoChange
 }) => {
-  const quesito = data[currentQuesito - 1];
-  const [key, setKey] = useState(0);
-  
-  // Forza re-render quando cambiano i dati
-  useEffect(() => {
-    setKey(prev => prev + 1);
-  }, [quesito.si, quesito.no]);
-  
-  const calculations = useMemo(() => {
-    const totalVotes = quesito.si + quesito.no;
-    const participationPercentage = totalVotes > 0 ? (totalVotes / totalAbitanti) * 100 : 0;
-    const quorumReached = participationPercentage >= quorumPercentage;
-    const siPercentage = totalVotes > 0 ? (quesito.si / totalVotes) * 100 : 0;
-    const noPercentage = totalVotes > 0 ? (quesito.no / totalVotes) * 100 : 0;
-    
-    return {
-      totalVotes,
-      participationPercentage,
-      quorumReached,
-      siPercentage,
-      noPercentage
+    const quesito = data[currentQuesito - 1];
+    const [key, setKey] = useState(0);
+    const [isAnimating, setIsAnimating] = useState(false);
+
+    // Motion values per animazioni fluide
+    const animatedPercentage = useMotionValue(0);
+    const displayPercentage = useTransform(
+        animatedPercentage,
+        (latest) => `${latest.toFixed(1)}%`
+    );
+
+    const calculations = useMemo(() => {
+        const totalVotes = quesito.si + quesito.no;
+        const participationPercentage = totalVotes > 0 ? (totalVotes / totalAbitanti) * 100 : 0;
+        const quorumReached = participationPercentage >= quorumPercentage;
+
+        const siPercentageOfTotal = (quesito.si / totalAbitanti) * 100;
+        const noPercentageOfTotal = (quesito.no / totalAbitanti) * 100;
+
+        const siPercentage = totalVotes > 0 ? (quesito.si / totalVotes) * 100 : 0;
+        const noPercentage = totalVotes > 0 ? (quesito.no / totalVotes) * 100 : 0;
+
+        return {
+            totalVotes,
+            participationPercentage,
+            quorumReached,
+            siPercentage,
+            noPercentage,
+            siPercentageOfTotal,
+            noPercentageOfTotal
+        };
+    }, [quesito.si, quesito.no, totalAbitanti, quorumPercentage]);
+
+    // Animazione della percentuale quando cambiano i dati
+    useEffect(() => {
+        setKey(prev => prev + 1);
+        setIsAnimating(true);
+
+        // Anima da 0 alla percentuale attuale
+        const controls = animate(animatedPercentage, calculations.participationPercentage, {
+            duration: 1.5,
+            ease: "easeOut"
+        });
+
+        const animationTimer = setTimeout(() => {
+            setIsAnimating(false);
+        }, 2000);
+
+        return () => {
+            controls.stop();
+            clearTimeout(animationTimer);
+        };
+    }, [quesito.si, quesito.no, calculations.participationPercentage, animatedPercentage]);
+
+    const radius = 120;
+    const centerX = 150;
+    const centerY = 150;
+    const strokeWidth = 40;
+    const circumference = 2 * Math.PI * radius;
+
+    const siLength = (calculations.siPercentageOfTotal / 100) * circumference;
+    const noLength = (calculations.noPercentageOfTotal / 100) * circumference;
+
+    // Calcola la posizione della linea del quorum
+    const quorumAngle = (quorumPercentage / 100) * 2 * Math.PI - Math.PI / 2;
+    const quorumX2 = centerX + (radius + strokeWidth / 2 + 15) * Math.cos(quorumAngle);
+    const quorumY2 = centerY + (radius + strokeWidth / 2 + 15) * Math.sin(quorumAngle);
+
+    // Calcola la posizione del testo con più offset
+    const labelOffset = 15; // Aumentato da 5 a 15 per più spazio
+    const isLeftSide = quorumX2 < centerX;
+
+
+
+
+    // Varianti di animazione
+    const chartVariants = {
+        hidden: { scale: 0.8, opacity: 0 },
+        visible: {
+            scale: 1,
+            opacity: 1,
+            transition: {
+                duration: 0.5,
+                ease: "easeOut"
+            }
+        }
     };
-  }, [quesito.si, quesito.no, totalAbitanti, quorumPercentage]);
 
-  const radius = 120;
-  const centerX = 150;
-  const centerY = 150;
-  const strokeWidth = 40;
-  const circumference = 2 * Math.PI * radius;
-  
-  // Calcola i valori per gli archi
-  const siLength = (calculations.siPercentage / 100) * circumference;
-  const noLength = (calculations.noPercentage / 100) * circumference;
-  const siOffset = circumference / 4;
-  const noOffset = circumference / 4 - siLength;
-  
-  // Calcola la posizione della linea del quorum
-  const quorumAngle = (quorumPercentage / 100) * 2 * Math.PI - Math.PI / 2;
-  const quorumX2 = centerX + (radius + strokeWidth/2) * Math.cos(quorumAngle);
-  const quorumY2 = centerY + (radius + strokeWidth/2) * Math.sin(quorumAngle);
-
-  return (
-    <div className="quorum-chart-container">
-      <h3 className="quesito-title">{quesito.name}</h3>
-      
-      <div className="chart-wrapper">
-        <svg className="quorum-pie-chart" viewBox="0 0 300 300">
-          {/* Cerchio di sfondo (non votanti) */}
-          <circle
-            cx={centerX}
-            cy={centerY}
-            r={radius}
-            fill="none"
-            stroke="#e5e7eb"
-            strokeWidth={strokeWidth}
-          />
-          
-          <AnimatePresence mode="wait">
-            {/* Arco per il SI - con key per forzare re-render */}
-            {calculations.siPercentage > 0 && (
-              <motion.circle
-                key={`si-${key}-${calculations.siPercentage}`}
-                cx={centerX}
-                cy={centerY}
-                r={radius}
-                fill="none"
-                stroke="#22c55e"
-                strokeWidth={strokeWidth}
-                strokeDasharray={`${siLength} ${circumference}`}
-                initial={{ 
-                  strokeDashoffset: circumference + siOffset,
-                  opacity: 0 
-                }}
-                animate={{ 
-                  strokeDashoffset: siOffset,
-                  opacity: 1 
-                }}
-                transition={{ duration: 1, ease: "easeOut" }}
-              />
-            )}
-            
-            {/* Arco per il NO - con key per forzare re-render */}
-            {calculations.noPercentage > 0 && (
-              <motion.circle
-                key={`no-${key}-${calculations.noPercentage}`}
-                cx={centerX}
-                cy={centerY}
-                r={radius}
-                fill="none"
-                stroke="#ef4444"
-                strokeWidth={strokeWidth}
-                strokeDasharray={`${noLength} ${circumference}`}
-                initial={{ 
-                  strokeDashoffset: circumference + noOffset,
-                  opacity: 0 
-                }}
-                animate={{ 
-                  strokeDashoffset: noOffset,
-                  opacity: 1 
-                }}
-                transition={{ duration: 1, ease: "easeOut", delay: 0.3 }}
-              />
-            )}
-          </AnimatePresence>
-          
-          {/* Linea del quorum */}
-          <motion.line
-            x1={centerX}
-            y1={centerY}
-            x2={quorumX2}
-            y2={quorumY2}
-            stroke="#1f2937"
-            strokeWidth="3"
-            strokeDasharray="5,5"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.5 }}
-          />
-          
-          {/* Etichetta quorum */}
-          <motion.text
-            x={quorumX2 + 10}
-            y={quorumY2}
-            textAnchor="start"
-            className="quorum-label"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.7 }}
-          >
-            Quorum {quorumPercentage}%
-          </motion.text>
-          
-          {/* Centro con percentuale di partecipazione */}
-          <circle cx={centerX} cy={centerY} r={radius - strokeWidth - 10} fill="white" />
-          
-          {/* Testi centrali con animazione */}
-          <motion.g
-            key={`text-${key}`}
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5 }}
-          >
-            <text x={centerX} y={centerY - 20} textAnchor="middle" className="center-percentage">
-              <tspan className="percentage-value">
-                {calculations.participationPercentage.toFixed(1)}%
-              </tspan>
-            </text>
-            <text x={centerX} y={centerY + 5} textAnchor="middle" className="center-label">
-              Affluenza
-            </text>
-            <text 
-              x={centerX} 
-              y={centerY + 30} 
-              textAnchor="middle" 
-              className={`quorum-status ${calculations.quorumReached ? 'reached' : 'not-reached'}`}
+    return (
+        <div className="quorum-chart-container">
+            <motion.h3
+                className="quesito-title"
+                key={`title-${currentQuesito}`}
+                initial={{ y: -20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ duration: 0.5 }}
             >
-              {calculations.quorumReached ? '✓ Quorum Raggiunto' : '✗ Quorum Non Raggiunto'}
-            </text>
-          </motion.g>
-        </svg>
-        
-        {/* Legenda laterale con key per aggiornamento */}
-        <motion.div 
-          className="vote-legend"
-          key={`legend-${key}`}
-          initial={{ opacity: 0.5 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.3 }}
-        >
-          <div className="legend-item si">
-            <div className="legend-color" style={{ backgroundColor: '#22c55e' }} />
-            <div className="legend-info">
-              <span className="legend-label">SÌ</span>
-              <motion.span 
-                className="legend-value"
-                key={`si-value-${quesito.si}`}
-                initial={{ scale: 1.2 }}
-                animate={{ scale: 1 }}
-                transition={{ duration: 0.3 }}
-              >
-                {quesito.si.toLocaleString('it-IT')}
-              </motion.span>
-              <span className="legend-percentage">{calculations.siPercentage.toFixed(1)}%</span>
+                {quesito.name}
+            </motion.h3>
+
+            <div className="chart-wrapper">
+                <motion.svg
+                    className="quorum-pie-chart"
+                    viewBox="0 0 300 340"  // Aumenta solo l'altezza da 300 a 340
+                    variants={chartVariants}
+                    initial="hidden"
+                    animate="visible"
+                    style={{ width: '300px', height: '340px' }}  // Mantieni le proporzioni
+                >
+                    {/* Cerchio di sfondo con animazione */}
+                    <motion.circle
+                        cx={centerX}
+                        cy={centerY}
+                        r={radius}
+                        fill="none"
+                        stroke="#e5e7eb"
+                        strokeWidth={strokeWidth}
+                        initial={{ pathLength: 0 }}
+                        animate={{ pathLength: 1 }}
+                        transition={{ duration: 1, ease: "easeOut" }}
+                    />
+
+                    {/* Gruppo ruotato per partire dall'alto */}
+                    <g transform={`rotate(-90 ${centerX} ${centerY})`}>
+                        <AnimatePresence mode="wait">
+                            {/* Arco per il SI con effetto di disegno */}
+                            {calculations.siPercentageOfTotal > 0 && (
+                                <motion.circle
+                                    key={`si-${key}-${calculations.siPercentageOfTotal}`}
+                                    cx={centerX}
+                                    cy={centerY}
+                                    r={radius}
+                                    fill="none"
+                                    stroke="#22c55e"
+                                    strokeWidth={strokeWidth}
+                                    strokeDasharray={`${siLength} ${circumference}`}
+                                    initial={{
+                                        strokeDasharray: `0 ${circumference}`,
+                                        opacity: 0,
+                                        strokeWidth: 0
+                                    }}
+                                    animate={{
+                                        strokeDasharray: `${siLength} ${circumference}`,
+                                        opacity: 1,
+                                        strokeWidth: strokeWidth
+                                    }}
+                                    transition={{
+                                        duration: 1.5,
+                                        ease: [0.43, 0.13, 0.23, 0.96],
+                                        strokeWidth: { duration: 0.5 }
+                                    }}
+                                />
+                            )}
+
+                            {/* Arco per il NO con effetto di disegno ritardato */}
+                            {calculations.noPercentageOfTotal > 0 && (
+                                <motion.circle
+                                    key={`no-${key}-${calculations.noPercentageOfTotal}`}
+                                    cx={centerX}
+                                    cy={centerY}
+                                    r={radius}
+                                    fill="none"
+                                    stroke="#ef4444"
+                                    strokeWidth={strokeWidth}
+                                    strokeDasharray={`0 ${siLength} ${noLength} ${circumference}`}
+                                    initial={{
+                                        strokeDasharray: `0 ${siLength} 0 ${circumference}`,
+                                        opacity: 0,
+                                        strokeWidth: 0
+                                    }}
+                                    animate={{
+                                        strokeDasharray: `0 ${siLength} ${noLength} ${circumference}`,
+                                        opacity: 1,
+                                        strokeWidth: strokeWidth
+                                    }}
+                                    transition={{
+                                        duration: 1.5,
+                                        ease: [0.43, 0.13, 0.23, 0.96],
+                                        delay: 0.5,
+                                        strokeWidth: { duration: 0.5, delay: 0.5 }
+                                    }}
+                                />
+                            )}
+                        </AnimatePresence>
+                    </g>
+
+                    {/* Linea del quorum con animazione di disegno */}
+                    <motion.line
+                        x1={centerX}
+                        y1={centerY}
+                        x2={centerX}
+                        y2={centerY}
+                        stroke="#1f2937"
+                        strokeWidth="3"
+                        strokeDasharray="5,5"
+                        animate={{
+                            x2: quorumX2,
+                            y2: quorumY2,
+                        }}
+                        transition={{
+                            duration: 1,
+                            delay: 1,
+                            ease: "easeOut"
+                        }}
+                    />
+
+                    {/* Etichetta quorum con fade-in */}
+                    <motion.text
+                        x={quorumX2 + Math.abs(labelOffset) * Math.cos(quorumAngle)}
+                        y={quorumY2 + Math.abs(labelOffset) * Math.sin(quorumAngle)}
+                        textAnchor="middle"
+                        dominantBaseline="middle"
+                        className="quorum-label"
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: 1.5, duration: 0.5 }}
+                    >
+                        Quorum {quorumPercentage}%
+                    </motion.text>
+
+                    {/* Centro con percentuale di partecipazione */}
+                    <motion.circle
+                        cx={centerX}
+                        cy={centerY}
+                        r={radius - strokeWidth - 10}
+                        fill="white"
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        transition={{ delay: 0.2, duration: 0.5, ease: "backOut" }}
+                    />
+
+                    {/* Testi centrali con animazione contatore */}
+                    <motion.g
+                        key={`text-${key}`}
+                        initial={{ opacity: 0, scale: 0.5 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 0.5, delay: 0.5 }}
+                    >
+                        <text
+                            x={centerX}
+                            y={centerY - 20}
+                            textAnchor="middle"
+                            className={`center-percentage ${isAnimating ? 'animating' : ''}`}
+                        >
+                            <motion.tspan className="percentage-value">
+                                {displayPercentage}
+                            </motion.tspan>
+                        </text>
+                        <text x={centerX} y={centerY + 5} textAnchor="middle" className="center-label">
+                            Affluenza
+                        </text>
+                        <motion.text
+                            x={centerX}
+                            y={centerY + 30}
+                            textAnchor="middle"
+                            className={`quorum-status ${calculations.quorumReached ? 'reached' : 'not-reached'}`}
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ delay: 2 }}
+                        >
+                            {calculations.quorumReached ? '✓ Quorum Raggiunto' : '✗ Quorum Non Raggiunto'}
+                        </motion.text>
+                    </motion.g>
+                </motion.svg>
+
+                {/* Legenda laterale con animazione stagger */}
+                <motion.div
+                    className="vote-legend"
+                    initial={{ x: 50, opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
+                    transition={{ duration: 0.5, delay: 0.3 }}
+                >
+                    <motion.div
+                        className="legend-item si"
+                        initial={{ x: 20, opacity: 0 }}
+                        animate={{ x: 0, opacity: 1 }}
+                        transition={{ delay: 0.6 }}
+                        whileHover={{ scale: 1.05 }}
+                    >
+                        <motion.div
+                            className="legend-color"
+                            style={{ backgroundColor: '#22c55e' }}
+                            initial={{ scale: 0 }}
+                            animate={{ scale: 1 }}
+                            transition={{ delay: 0.7, type: "spring" }}
+                        />
+                        <div className="legend-info">
+                            <span className="legend-label">SÌ</span>
+                            <motion.span
+                                className="legend-value"
+                                key={`si-value-${quesito.si}`}
+                                initial={{ scale: 1.5, color: '#22c55e' }}
+                                animate={{ scale: 1, color: '#000' }}
+                                transition={{ duration: 0.5 }}
+                            >
+                                {quesito.si.toLocaleString('it-IT')}
+                            </motion.span>
+                            <span className="legend-percentage">{calculations.siPercentage.toFixed(1)}%</span>
+                        </div>
+                    </motion.div>
+
+                    <motion.div
+                        className="legend-item no"
+                        initial={{ x: 20, opacity: 0 }}
+                        animate={{ x: 0, opacity: 1 }}
+                        transition={{ delay: 0.8 }}
+                        whileHover={{ scale: 1.05 }}
+                    >
+                        <motion.div
+                            className="legend-color"
+                            style={{ backgroundColor: '#ef4444' }}
+                            initial={{ scale: 0 }}
+                            animate={{ scale: 1 }}
+                            transition={{ delay: 0.9, type: "spring" }}
+                        />
+                        <div className="legend-info">
+                            <span className="legend-label">NO</span>
+                            <motion.span
+                                className="legend-value"
+                                key={`no-value-${quesito.no}`}
+                                initial={{ scale: 1.5, color: '#ef4444' }}
+                                animate={{ scale: 1, color: '#000' }}
+                                transition={{ duration: 0.5 }}
+                            >
+                                {quesito.no.toLocaleString('it-IT')}
+                            </motion.span>
+                            <span className="legend-percentage">{calculations.noPercentage.toFixed(1)}%</span>
+                        </div>
+                    </motion.div>
+
+                    <motion.div
+                        className="legend-divider"
+                        initial={{ scaleX: 0 }}
+                        animate={{ scaleX: 1 }}
+                        transition={{ delay: 1, duration: 0.5 }}
+                    />
+
+                    <motion.div
+                        className="legend-item total"
+                        initial={{ x: 20, opacity: 0 }}
+                        animate={{ x: 0, opacity: 1 }}
+                        transition={{ delay: 1.2 }}
+                        whileHover={{ scale: 1.05 }}
+                    >
+                        <div className="legend-info">
+                            <span className="legend-label">Votanti</span>
+                            <motion.span
+                                className="legend-value"
+                                key={`total-${calculations.totalVotes}`}
+                                initial={{ scale: 1.2 }}
+                                animate={{ scale: 1 }}
+                                transition={{ duration: 0.3 }}
+                            >
+                                {calculations.totalVotes.toLocaleString('it-IT')}
+                            </motion.span>
+                            <span className="legend-percentage">su {totalAbitanti.toLocaleString('it-IT')}</span>
+                        </div>
+                    </motion.div>
+
+                    <motion.div
+                        className="legend-item non-votanti"
+                        initial={{ x: 20, opacity: 0 }}
+                        animate={{ x: 0, opacity: 1 }}
+                        transition={{ delay: 1.4 }}
+                        whileHover={{ scale: 1.05 }}
+                    >
+
+
+                    </motion.div>
+                </motion.div>
             </div>
-          </div>
-          
-          <div className="legend-item no">
-            <div className="legend-color" style={{ backgroundColor: '#ef4444' }} />
-            <div className="legend-info">
-              <span className="legend-label">NO</span>
-              <motion.span 
-                className="legend-value"
-                key={`no-value-${quesito.no}`}
-                initial={{ scale: 1.2 }}
-                animate={{ scale: 1 }}
-                transition={{ duration: 0.3 }}
-              >
-                {quesito.no.toLocaleString('it-IT')}
-              </motion.span>
-              <span className="legend-percentage">{calculations.noPercentage.toFixed(1)}%</span>
-            </div>
-          </div>
-          
-          <div className="legend-divider" />
-          
-          <div className="legend-item total">
-            <div className="legend-info">
-              <span className="legend-label">Votanti</span>
-              <motion.span 
-                className="legend-value"
-                key={`total-${calculations.totalVotes}`}
-                initial={{ scale: 1.2 }}
-                animate={{ scale: 1 }}
-                transition={{ duration: 0.3 }}
-              >
-                {calculations.totalVotes.toLocaleString('it-IT')}
-              </motion.span>
-              <span className="legend-percentage">su {totalAbitanti.toLocaleString('it-IT')}</span>
-            </div>
-          </div>
-        </motion.div>
-      </div>
-      
-      {/* Navigazione quesiti */}
-      <div className="quesiti-navigation">
-        {data.map((_, index) => (
-          <button
-            key={index}
-            className={`quesito-button ${currentQuesito === index + 1 ? 'active' : ''}`}
-            onClick={() => onQuesitoChange(index + 1)}
-          >
-            Q{index + 1}
-          </button>
-        ))}
-      </div>
-    </div>
-  );
+
+            {/* Navigazione quesiti con animazione */}
+            <motion.div
+                className="quesiti-navigation"
+                initial={{ y: 20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: 0.5, duration: 0.5 }}
+            >
+                {data.map((_, index) => (
+                    <motion.button
+                        key={index}
+                        className={`quesito-button ${currentQuesito === index + 1 ? 'active' : ''}`}
+                        onClick={() => onQuesitoChange(index + 1)}
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.95 }}
+                        initial={{ opacity: 0, scale: 0 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{
+                            delay: 0.8 + (index * 0.1),
+                            type: "spring",
+                            stiffness: 500,
+                            damping: 30
+                        }}
+                    >
+                        Q{index + 1}
+                    </motion.button>
+                ))}
+            </motion.div>
+        </div>
+    );
 };
 
 export default QuorumPieChart;

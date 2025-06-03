@@ -16,11 +16,16 @@
   position: relative;
   height: 160px;
   margin-bottom: 30px;
+  /* Aggiungi padding a destra per contenere la corona */
+  padding-right: 60px;
+  /* Permetti overflow visibile per non tagliare elementi */
+  overflow: visible;
 }
 
 .bar-row {
   position: absolute;
-  width: 100%;
+  /* Riduci la larghezza per fare spazio alla corona */
+  width: calc(100% - 60px);
   height: 60px;
   display: flex;
   align-items: center;
@@ -94,6 +99,8 @@
   font-size: 24px;
 }
 
+
+
 .question-stats {
   display: flex;
   justify-content: space-around;
@@ -161,11 +168,11 @@
   font-weight: 700;
 }
 
-/* Animazione per l'indicatore di parità */
+/* Animazione per l'indicatore di parità con transform corretto */
 @keyframes shake {
-  0%, 100% { transform: rotate(0deg); }
-  25% { transform: rotate(-5deg); }
-  75% { transform: rotate(5deg); }
+  0%, 100% { transform: translateY(-50%) rotate(0deg); }
+  25% { transform: translateY(-50%) rotate(-5deg); }
+  75% { transform: translateY(-50%) rotate(5deg); }
 }
 
 .parity-indicator {

@@ -1,0 +1,19 @@
+{
+    "$schema": "./node_modules/@openapitools/openapi-generator-cli/config.schema.json",
+    "spaces": 2,
+    "generator-cli": {
+        "version": "7.1.0",
+        "generators": {
+            "typescript": {
+                "generatorName": "typescript-fetch",
+                "output": "./src/api/generated",
+                "inputSpec": "http://localhost:8080/v3/api-docs",
+                "additionalProperties": {
+                    "supportsES6": true,
+                    "npmName": "referendum-api",
+                    "typescriptThreePlus": true
+                }
+            }
+        }
+    }
+}

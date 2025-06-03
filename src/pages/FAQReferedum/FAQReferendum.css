@@ -374,39 +374,3 @@
   outline-offset: 2px;
 }
 
-/* Dark mode support (opzionale) */
-@media (prefers-color-scheme: dark) {
-  .faq-referendum-container {
-    color: #f3f4f6;
-  }
-  
-  .faq-referendum-title {
-    color: #f3f4f6;
-  }
-  
-  .faq-referendum-intro {
-    background: #1f2937;
-    border-color: #4b5563;
-  }
-  
-  .faq-referendum-intro h2 {
-    color: #a5b4fc;
-  }
-  
-  .faq-referendum-intro p {
-    color: #d1d5db;
-  }
-  
-  .faq-referendum-item {
-    background: #1f2937;
-    border-color: #374151;
-  }
-  
-  .faq-referendum-question {
-    color: #f3f4f6;
-  }
-  
-  .faq-referendum-answer {
-    color: #d1d5db;
-  }
-}

@@ -9,7 +9,9 @@
         "lint": "eslint .",
         "preview": "vite preview",
         "predeploy": "npm run build",
-        "deploy": "gh-pages -d dist"
+        "deploy": "gh-pages -d dist",
+        "generate-api": "openapi-generator-cli generate -i http://localhost:8080/v3/api-docs -g typescript-fetch -o ./src/api/generated --skip-validate-spec --additional-properties=supportsES6=true,npmName=referendum-api,typescriptThreePlus=true",
+        "generate-api:clean": "rm -rf ./src/api/generated && npm run generate-api"
     },
     "dependencies": {
         "@emotion/react": "^11.14.0",
@@ -21,6 +23,7 @@
     },
     "devDependencies": {
         "@eslint/js": "^9.25.0",
+        "@openapitools/openapi-generator-cli": "^2.20.2",
         "@types/react": "^19.1.2",
         "@types/react-dom": "^19.1.2",
         "@vitejs/plugin-react": "^4.4.1",

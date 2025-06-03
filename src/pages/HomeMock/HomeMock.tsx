@@ -1,24 +1,11 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import QuorumPieChart from '../../components/QuorumPieChart/QuorumPieChart';
-import type { DataItem, VoteData } from '../../types';
-import {
-    createBarData,
-    createRadarData,
-} from '../../data/initialData';
-import './Home.css';
+import type { VoteData } from '../../types';
+import './HomeMock.css';
 import BarChartByQuestion from '../../components/BarChartByQuestion/BarChartByQuestion';
-import { Configuration, DisplayControllerApi, type VoteDataResponse } from '../../api/generated/src';
 
 type ChartType = 'bar' | 'quorum';
-
-// Configurazione API
-const apiConfig = new Configuration({
-    basePath: import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080',
-});
-
-// Istanza dell'API
-const referendumApi = new DisplayControllerApi(apiConfig);
 
 // Helper per mappare i colori
 const QUESITO_COLORS: { [key: number]: string } = {
@@ -29,63 +16,90 @@ const QUESITO_COLORS: { [key: number]: string } = {
     5: '#8dd1e1'
 };
 
-const Home: React.FC = () => {
+// Simulatore di dati
+class DataSimulator {
+    private baseData: VoteData[] = [
+        { id: 1, name: 'Cittadinanza: dimezzamento da 10 a 5 anni', si: 0, no: 0, color: QUESITO_COLORS[1] },
+        { id: 2, name: 'Cannabis: depenalizzazione coltivazione domestica', si: 0, no: 0, color: QUESITO_COLORS[2] },
+        { id: 3, name: 'Eutanasia: introduzione del "rifiuto delle cure"', si: 0, no: 0, color: QUESITO_COLORS[3] },
+        { id: 4, name: 'Giustizia: separazione delle carriere', si: 0, no: 0, color: QUESITO_COLORS[4] },
+        { id: 5, name: 'Giustizia: limiti alla custodia cautelare', si: 0, no: 0, color: QUESITO_COLORS[5] }
+    ];
+
+    private votingProgress = 0;
+    private totalPeople = 46747;
+
+    constructor() {
+        // Inizializza con alcuni voti casuali
+        this.baseData = this.baseData.map(item => ({
+            ...item,
+            si: Math.floor(Math.random() * 1000),
+            no: Math.floor(Math.random() * 1000)
+        }));
+    }
+
+    getNextData() {
+        // Simula progresso votazione
+        this.votingProgress = Math.min(this.votingProgress + Math.random() * 2, 100);
+
+        // Aggiorna i voti con incrementi casuali
+        this.baseData = this.baseData.map(item => {
+            const siIncrement = Math.floor(Math.random() * 50);
+            const noIncrement = Math.floor(Math.random() * 50);
+
+            return {
+                ...item,
+                si: item.si + siIncrement,
+                no: item.no + noIncrement
+            };
+        });
+
+        return {
+            data: [...this.baseData],
+            votersInfo: {
+                totalPeople: this.totalPeople,
+                totalVoters: Math.floor((this.votingProgress / 100) * this.totalPeople),
+                turnoutPercentage: this.votingProgress,
+                isLive: this.votingProgress < 95 // Simula live fino al 95%
+            }
+        };
+    }
+}
+
+const HomeMock: React.FC = () => {
     // Stati per i dati
     const [referendumData, setReferendumData] = useState<VoteData[]>([]);
-    const [_barData, setBarData] = useState<DataItem[]>([]);
-    const [_radarData, setRadarData] = useState<DataItem[]>([]);
 
     // Stati UI
     const [currentChart, setCurrentChart] = useState<ChartType>('quorum');
     const [currentQuesito, setCurrentQuesito] = useState(1);
     const [isLive, setIsLive] = useState(false);
     const [totalAbitanti, setTotalAbitanti] = useState(46747);
-    const [quorumPercentage, setQuorumPercentage] = useState(50);
+    const [quorumPercentage, setQuorumPercentage] = useState(0);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [updateButtonState, setUpdateButtonState] = useState<'idle' | 'loading' | 'completed'>('idle');
     const [isUpdating, setIsUpdating] = useState(false);
     const [updateKey, setUpdateKey] = useState(0);
 
-
     // Refs
     const intervalRef = useRef<number | null>(null);
     const isUpdatingRef = useRef(false);
-    const isInitializedRef = useRef(false);
+    const simulatorRef = useRef(new DataSimulator());
 
     const charts: ChartType[] = ['quorum', 'bar'];
     const currentIndex = charts.indexOf(currentChart);
 
-    // Funzione per mappare VoteDataResponse a VoteData
-    const mapResponseToVoteData = (data: VoteDataResponse[]): VoteData[] => {
-        return data.map(item => {
-            const id = item.id ?? 0;
-            const quesito = item.quesito ?? '';
-            const si = item.si ?? 0;
-            const no = item.no ?? 0;
-            return {
-                id,
-                name: quesito,
-                si,
-                no,
-                color: QUESITO_COLORS[id] || '#666'
-            };
-        });
-    };
-
-    // Funzione base per recuperare i dati - CORRETTA
-    // Modifica la funzione fetchLatestData per incrementare updateKey
+    // Funzione per simulare il recupero dati
     const fetchLatestData = async () => {
-        // Chiamate sequenziali per evitare duplicati
-        const votersInfo = await referendumApi.getTotalVoters();
-        const votesData = await referendumApi.statsVote();
-        const mappedData = mapResponseToVoteData(votesData);
+        // Simula delay di rete
+        await new Promise(resolve => setTimeout(resolve, 300 + Math.random() * 200));
 
-        setReferendumData(mappedData);
-        setBarData(createBarData(mappedData));
-        setRadarData(createRadarData(mappedData));
-        setQuorumPercentage(votersInfo.turnoutPercentage || 0);
-        setTotalAbitanti(15000);
+        const { data, votersInfo } = simulatorRef.current.getNextData();
+
+        setReferendumData(data);
+        setQuorumPercentage(50);
+        setTotalAbitanti(votersInfo.totalPeople);
 
         // Incrementa updateKey per forzare il refresh
         setUpdateKey(prev => prev + 1);
@@ -95,17 +109,16 @@ const Home: React.FC = () => {
 
     // Aggiornamento automatico (per intervallo)
     const automaticUpdate = useCallback(async () => {
-        // Skip se già in aggiornamento manuale
         if (isUpdatingRef.current || updateButtonState === 'loading' || isUpdating) {
             console.log('Skip automatic update - manual update in progress');
             return;
         }
 
         try {
-            console.log('🔄 Automatic update');
+            console.log('🔄 Automatic update (simulated)');
             const votersInfo = await fetchLatestData();
 
-            // Gestisci cambio stato live dal server
+            // Gestisci cambio stato live
             if (!votersInfo.isLive && intervalRef.current) {
                 stopLiveUpdate();
             }
@@ -116,11 +129,9 @@ const Home: React.FC = () => {
         }
     }, [updateButtonState, isUpdating]);
 
-    // Aggiornamento manuale (per pulsante) - CORRETTA
-    // 5. Nel manualUpdate, controlla meglio le condizioni
+    // Aggiornamento manuale
     const manualUpdate = async () => {
-        console.log('🔄 manualUpdate chiamato');
-
+        console.log('🔄 manualUpdate chiamato (simulated)');
         if (isUpdatingRef.current || isUpdating || updateButtonState !== 'idle') {
             console.log('❌ Update già in corso, SKIP');
             return;
@@ -137,25 +148,21 @@ const Home: React.FC = () => {
 
             const elapsedTime = Date.now() - startTime;
             const minimumLoadingTime = 1500;
-
             if (elapsedTime < minimumLoadingTime) {
                 await new Promise(resolve => setTimeout(resolve, minimumLoadingTime - elapsedTime));
             }
 
             setUpdateButtonState('completed');
-
             setTimeout(() => {
                 setUpdateButtonState('idle');
                 setIsUpdating(false);
             }, 2000);
 
-            // Gestione live state migliorata
+            // Gestione live state
             if (votersInfo.isLive) {
                 if (!intervalRef.current) {
-                    console.log('📡 Avvio live update da manualUpdate');
+                    console.log('📡 Avvio live update simulato');
                     startLiveUpdate();
-                } else {
-                    console.log('ℹ️ Live update già attivo');
                 }
             } else {
                 if (intervalRef.current || isLive) {
@@ -163,7 +170,6 @@ const Home: React.FC = () => {
                     stopLiveUpdate();
                 }
             }
-
         } catch (err) {
             console.error('Error in manual update:', err);
             setError('Errore nell\'aggiornamento dei voti');
@@ -174,82 +180,59 @@ const Home: React.FC = () => {
         }
     };
 
-    // 1. Modifica startLiveUpdate per gestire meglio lo stato
+    // Start live update
     const startLiveUpdate = useCallback(() => {
-        console.log('🟢 Starting live update');
-        console.log('Stato attuale:', {
-            intervalRef: intervalRef.current,
-            isLive,
-        });
+        console.log('🟢 Starting live update (simulated)');
 
-        // Se c'è già un intervallo attivo, non fare nulla
         if (intervalRef.current) {
             console.log('⚠️ Intervallo già esistente, SKIP');
             return;
         }
 
-        // NON controllare isLive qui! Potrebbe essere già true ma senza intervallo
-
-        // Pulisci eventuale intervallo zombie
-        if (intervalRef.current) {
-            clearInterval(intervalRef.current);
-            intervalRef.current = null;
-        }
-
-        console.log('✅ Avvio nuovo intervallo');
         setIsLive(true);
         intervalRef.current = window.setInterval(() => {
-            console.log('⏰ Tick automatico');
+            console.log('⏰ Tick automatico simulato');
             automaticUpdate();
-        }, 30000);
-        console.log('✅ Intervallo creato:', intervalRef.current);
-    }, [automaticUpdate]); // Rimuovi isLive dalle dipendenze
+        }, 5000); // Più frequente per la demo
 
-    // Ferma aggiornamento live
+        console.log('✅ Intervallo simulato creato:', intervalRef.current);
+    }, [automaticUpdate]);
+
+    // Stop live update
     const stopLiveUpdate = useCallback(() => {
         console.log('🔴 Stopping live update');
-
         if (intervalRef.current) {
-            console.log('🛑 Fermo intervallo:', intervalRef.current);
             clearInterval(intervalRef.current);
             intervalRef.current = null;
         }
-
-        setIsLive(false); // Importante: resetta anche isLive
+        setIsLive(false);
     }, []);
 
     // Carica i dati iniziali
     useEffect(() => {
-        // Usa un flag locale invece di ref per evitare problemi con StrictMode
         let isMounted = true;
-        let hasInitialized = false;
 
         const loadInitialData = async () => {
-            // Controlla se già inizializzato
-            if (hasInitialized || !isMounted) {
-                console.log('⏭️ Skip inizializzazione');
-                return;
-            }
-
-            hasInitialized = true;
-            console.log('🚀 Caricamento dati iniziali...');
-
+            console.log('🚀 Caricamento dati simulati iniziali...');
             try {
                 setIsLoading(true);
                 setError(null);
+
+                // Simula delay iniziale
+                await new Promise(resolve => setTimeout(resolve, 1000));
 
                 const votersInfo = await fetchLatestData();
 
                 if (!isMounted) return;
 
                 if (votersInfo.isLive) {
-                    console.log('📡 Server è live al caricamento');
+                    console.log('📡 Simulazione live attiva');
                     startLiveUpdate();
                 }
             } catch (err) {
                 if (isMounted) {
                     console.error('Error loading initial data:', err);
-                    setError('Errore nel caricamento dei dati. Riprova più tardi.');
+                    setError('Errore nel caricamento dei dati simulati.');
                 }
             } finally {
                 if (isMounted) {
@@ -258,32 +241,22 @@ const Home: React.FC = () => {
             }
         };
 
-        // Delay per evitare chiamate multiple in StrictMode
-        const timeoutId = setTimeout(() => {
-            if (isMounted && !isInitializedRef.current) {
-                isInitializedRef.current = true;
-                loadInitialData();
-            }
-        }, 100);
+        loadInitialData();
 
         return () => {
             isMounted = false;
-            clearTimeout(timeoutId);
-            // Non resettare isInitializedRef qui per evitare re-inizializzazioni
         };
-    }, []); // Array vuoto, nessuna dipendenza
+    }, []);
 
-    // 4. Cleanup finale migliorato
+    // Cleanup
     useEffect(() => {
         return () => {
-            console.log('🧹 Cleanup finale componente');
-            // Ferma tutto alla distruzione del componente
+            console.log('🧹 Cleanup simulatore');
             if (intervalRef.current) {
                 clearInterval(intervalRef.current);
                 intervalRef.current = null;
             }
             setIsLive(false);
-            isInitializedRef.current = false;
         };
     }, []);
 
@@ -315,7 +288,7 @@ const Home: React.FC = () => {
     if (isLoading) {
         return (
             <div className="loading-container">
-                <div className="loading-spinner">Caricamento dati...</div>
+                <div className="loading-spinner">Caricamento dati simulati...</div>
             </div>
         );
     }
@@ -344,6 +317,20 @@ const Home: React.FC = () => {
                 </div>
             )}
 
+            {/* Banner simulazione */}
+            <div style={{
+                background: '#fef3c7',
+                border: '1px solid #f59e0b',
+                borderRadius: '8px',
+                padding: '10px',
+                marginBottom: '15px',
+                textAlign: 'center',
+                fontSize: '14px',
+                color: '#92400e'
+            }}>
+                ⚠️ Modalità simulazione - Dati di test
+            </div>
+
             {/* Header section con navigazione e pulsante aggiorna */}
             <div className="header-section">
                 <div className="chart-navigation">
@@ -357,17 +344,15 @@ const Home: React.FC = () => {
                     >
                         ‹
                     </button>
-
                     <h1 className="title">
                         {getChartTitle()}
                         {isLive && (
                             <span className="live-indicator-inline">
                                 <span className="live-dot-blink"></span>
-                                LIVE
+                                LIVE (DEMO)
                             </span>
                         )}
                     </h1>
-
                     <button
                         className="nav-arrow nav-next"
                         onClick={(e) => {
@@ -380,7 +365,7 @@ const Home: React.FC = () => {
                     </button>
                 </div>
 
-                {/* Pulsante aggiorna centrato */}
+                {/* Pulsante aggiorna */}
                 <div className="update-button-container">
                     <button
                         className={`update-button ${updateButtonState !== 'idle' ? 'active' : ''}`}
@@ -414,7 +399,9 @@ const Home: React.FC = () => {
                 </div>
             </div>
 
-            {/* Indicatori di navigazione grafici */}
+
+
+            {/* Indicatori di navigazione */}
             <div className="chart-indicator" role="tablist">
                 {charts.map((chart) => (
                     <span
@@ -434,13 +421,14 @@ const Home: React.FC = () => {
                 ))}
             </div>
 
-            {/* Container per i grafici */}
 
+
+            {/* Container per i grafici */}
             <div className="chart-container" role="main">
                 <AnimatePresence mode="wait">
                     {currentChart === 'bar' && (
                         <motion.div
-                            key={`bar-chart-${updateKey}`} // Chiave dinamica
+                            key={`bar-chart-${updateKey}`}
                             initial={{ opacity: 0, y: 20, scale: 0.95 }}
                             animate={{ opacity: 1, y: 0, scale: 1 }}
                             exit={{ opacity: 0, y: -20, scale: 0.95 }}
@@ -460,7 +448,7 @@ const Home: React.FC = () => {
 
                     {currentChart === 'quorum' && (
                         <motion.div
-                            key={`quorum-chart-${updateKey}`} // Chiave dinamica
+                            key={`quorum-chart-${updateKey}`}
                             initial={{ opacity: 0, y: 20, scale: 0.95 }}
                             animate={{ opacity: 1, y: 0, scale: 1 }}
                             exit={{ opacity: 0, y: -20, scale: 0.95 }}
@@ -481,8 +469,22 @@ const Home: React.FC = () => {
                     )}
                 </AnimatePresence>
             </div>
+
+            {/* Info debug per simulazione */}
+            <div style={{
+                marginTop: '20px',
+                padding: '10px',
+                background: '#f3f4f6',
+                borderRadius: '8px',
+                fontSize: '12px',
+                color: '#6b7280',
+                textAlign: 'center'
+            }}>
+                Simulazione: {quorumPercentage.toFixed(1)}% affluenza |
+                {isLive ? ' Aggiornamento automatico ogni 5 secondi' : ' Votazione conclusa'}
+            </div>
         </motion.div>
     );
 };
 
-export default React.memo(Home);
+export default React.memo(HomeMock);

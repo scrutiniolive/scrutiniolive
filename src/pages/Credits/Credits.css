@@ -41,6 +41,7 @@
 
 /* Riga per chi siamo e funzionalità */
 .credits-row {
+    text-align: center;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 20px;
@@ -501,50 +502,6 @@
   }
 }
 
-/* Dark mode support opzionale */
-@media (prefers-color-scheme: dark) {
-  .credit-card-half,
-  .credit-card-full {
-    background: #1f2937;
-    border-color: #374151;
-  }
-  
-  .credit-card-half h3,
-  .credit-card-full h3 {
-    color: #a5b4fc;
-  }
-  
-  .credit-card-half p,
-  .credit-card-half li {
-    color: #e5e7eb;
-  }
-  
-  .developer-link {
-    background: #374151;
-    color: #e5e7eb;
-  }
-  
-  .developer-link:hover {
-    background: #4b5563;
-  }
-  
-  .social-link-new {
-    background: #374151;
-    color: #e5e7eb;
-  }
-  
-  .social-link-new:hover {
-    background: #4b5563;
-  }
-  
-  .copyright-simple {
-    background: #111827;
-  }
-  
-  .copyright-simple p {
-    color: #9ca3af;
-  }
-}
 
 /* Animazioni extra */
 @keyframes fadeInScale {
