@@ -17,6 +17,7 @@ export interface VoteData {
     name: string;
     si: number;
     no: number;
+    blankNull: number;
     color: string;
 }
 

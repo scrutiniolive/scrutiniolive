@@ -63,11 +63,13 @@ const Home: React.FC = () => {
             const quesito = item.quesito ?? '';
             const si = item.si ?? 0;
             const no = item.no ?? 0;
+            const blankNull = item.blank ?? 0;
             return {
                 id,
                 name: quesito,
                 si,
                 no,
+                blankNull,
                 color: QUESITO_COLORS[id] || '#666'
             };
         });

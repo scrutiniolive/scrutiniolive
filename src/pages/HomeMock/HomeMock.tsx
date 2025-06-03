@@ -19,22 +19,23 @@ const QUESITO_COLORS: { [key: number]: string } = {
 // Simulatore di dati
 class DataSimulator {
     private baseData: VoteData[] = [
-        { id: 1, name: 'Cittadinanza: dimezzamento da 10 a 5 anni', si: 0, no: 0, color: QUESITO_COLORS[1] },
-        { id: 2, name: 'Cannabis: depenalizzazione coltivazione domestica', si: 0, no: 0, color: QUESITO_COLORS[2] },
-        { id: 3, name: 'Eutanasia: introduzione del "rifiuto delle cure"', si: 0, no: 0, color: QUESITO_COLORS[3] },
-        { id: 4, name: 'Giustizia: separazione delle carriere', si: 0, no: 0, color: QUESITO_COLORS[4] },
-        { id: 5, name: 'Giustizia: limiti alla custodia cautelare', si: 0, no: 0, color: QUESITO_COLORS[5] }
+        { id: 1, name: 'Cittadinanza: dimezzamento da 10 a 5 anni', si: 0, no: 0, blankNull: 0, color: QUESITO_COLORS[1] },
+        { id: 2, name: 'Cannabis: depenalizzazione coltivazione domestica', si: 0, no: 0, blankNull: 0, color: QUESITO_COLORS[2] },
+        { id: 3, name: 'Eutanasia: introduzione del "rifiuto delle cure"', si: 0, no: 0, blankNull: 0, color: QUESITO_COLORS[3] },
+        { id: 4, name: 'Giustizia: separazione delle carriere', si: 0, no: 0, blankNull: 0, color: QUESITO_COLORS[4] },
+        { id: 5, name: 'Giustizia: limiti alla custodia cautelare', si: 0, no: 0, blankNull: 0, color: QUESITO_COLORS[5] }
     ];
 
     private votingProgress = 0;
-    private totalPeople = 46747;
+    private totalPeople = 15000;
 
     constructor() {
-        // Inizializza con alcuni voti casuali
+        // Inizializza con alcuni voti casuali includendo blankNull
         this.baseData = this.baseData.map(item => ({
             ...item,
-            si: Math.floor(Math.random() * 1000),
-            no: Math.floor(Math.random() * 1000)
+            si: Math.floor(Math.random() * 2000),
+            no: Math.floor(Math.random() * 2000),
+            blankNull: Math.floor(Math.random() * 800) // Solitamente meno delle altre categorie
         }));
     }
 
@@ -46,11 +47,13 @@ class DataSimulator {
         this.baseData = this.baseData.map(item => {
             const siIncrement = Math.floor(Math.random() * 50);
             const noIncrement = Math.floor(Math.random() * 50);
+            const blankNullIncrement = Math.floor(Math.random() * 10); // Incremento più piccolo per schede bianche/nulle
 
             return {
                 ...item,
                 si: item.si + siIncrement,
-                no: item.no + noIncrement
+                no: item.no + noIncrement,
+                blankNull: item.blankNull + blankNullIncrement
             };
         });
 
@@ -132,6 +135,7 @@ const HomeMock: React.FC = () => {
     // Aggiornamento manuale
     const manualUpdate = async () => {
         console.log('🔄 manualUpdate chiamato (simulated)');
+
         if (isUpdatingRef.current || isUpdating || updateButtonState !== 'idle') {
             console.log('❌ Update già in corso, SKIP');
             return;
@@ -148,11 +152,13 @@ const HomeMock: React.FC = () => {
 
             const elapsedTime = Date.now() - startTime;
             const minimumLoadingTime = 1500;
+
             if (elapsedTime < minimumLoadingTime) {
                 await new Promise(resolve => setTimeout(resolve, minimumLoadingTime - elapsedTime));
             }
 
             setUpdateButtonState('completed');
+
             setTimeout(() => {
                 setUpdateButtonState('idle');
                 setIsUpdating(false);
@@ -183,7 +189,6 @@ const HomeMock: React.FC = () => {
     // Start live update
     const startLiveUpdate = useCallback(() => {
         console.log('🟢 Starting live update (simulated)');
-
         if (intervalRef.current) {
             console.log('⚠️ Intervallo già esistente, SKIP');
             return;
@@ -193,7 +198,7 @@ const HomeMock: React.FC = () => {
         intervalRef.current = window.setInterval(() => {
             console.log('⏰ Tick automatico simulato');
             automaticUpdate();
-        }, 5000); // Più frequente per la demo
+        }, 30000); // Più frequente per la demo
 
         console.log('✅ Intervallo simulato creato:', intervalRef.current);
     }, [automaticUpdate]);
@@ -344,6 +349,7 @@ const HomeMock: React.FC = () => {
                     >
                         ‹
                     </button>
+
                     <h1 className="title">
                         {getChartTitle()}
                         {isLive && (
@@ -353,6 +359,7 @@ const HomeMock: React.FC = () => {
                             </span>
                         )}
                     </h1>
+
                     <button
                         className="nav-arrow nav-next"
                         onClick={(e) => {
@@ -398,9 +405,6 @@ const HomeMock: React.FC = () => {
                     </button>
                 </div>
             </div>
-
-
-
             {/* Indicatori di navigazione */}
             <div className="chart-indicator" role="tablist">
                 {charts.map((chart) => (
@@ -420,8 +424,6 @@ const HomeMock: React.FC = () => {
                     />
                 ))}
             </div>
-
-
 
             {/* Container per i grafici */}
             <div className="chart-container" role="main">
@@ -445,7 +447,6 @@ const HomeMock: React.FC = () => {
                             />
                         </motion.div>
                     )}
-
                     {currentChart === 'quorum' && (
                         <motion.div
                             key={`quorum-chart-${updateKey}`}
@@ -480,8 +481,15 @@ const HomeMock: React.FC = () => {
                 color: '#6b7280',
                 textAlign: 'center'
             }}>
-                Simulazione: {quorumPercentage.toFixed(1)}% affluenza |
-                {isLive ? ' Aggiornamento automatico ogni 5 secondi' : ' Votazione conclusa'}
+                {/* Mostra informazioni dettagliate sulla simulazione */}
+                <div>
+                    Simulazione: {quorumPercentage}% quorum richiesto |
+                    Affluenza attuale: {((referendumData.reduce((acc, q) => acc + q.si + q.no + q.blankNull, 0) / totalAbitanti) * 100).toFixed(1)}% |
+                    {isLive ? ' Aggiornamento automatico ogni 5 secondi' : ' Votazione conclusa'}
+                </div>
+                <div style={{ marginTop: '5px' }}>
+                    Totale voti: {referendumData.reduce((acc, q) => acc + q.si + q.no + q.blankNull, 0).toLocaleString('it-IT')} su {totalAbitanti.toLocaleString('it-IT')} aventi diritto
+                </div>
             </div>
         </motion.div>
     );

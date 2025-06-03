@@ -30,15 +30,17 @@ const QuorumPieChart: React.FC<QuorumPieChartProps> = ({
     );
 
     const calculations = useMemo(() => {
-        const totalVotes = quesito.si + quesito.no;
+        const totalVotes = quesito.si + quesito.no + quesito.blankNull;
         const participationPercentage = totalVotes > 0 ? (totalVotes / totalAbitanti) * 100 : 0;
         const quorumReached = participationPercentage >= quorumPercentage;
 
         const siPercentageOfTotal = (quesito.si / totalAbitanti) * 100;
         const noPercentageOfTotal = (quesito.no / totalAbitanti) * 100;
+        const blankNullPercentageOfTotal = (quesito.blankNull / totalAbitanti) * 100;
 
         const siPercentage = totalVotes > 0 ? (quesito.si / totalVotes) * 100 : 0;
         const noPercentage = totalVotes > 0 ? (quesito.no / totalVotes) * 100 : 0;
+        const blankNullPercentage = totalVotes > 0 ? (quesito.blankNull / totalVotes) * 100 : 0;
 
         return {
             totalVotes,
@@ -46,10 +48,12 @@ const QuorumPieChart: React.FC<QuorumPieChartProps> = ({
             quorumReached,
             siPercentage,
             noPercentage,
+            blankNullPercentage,
             siPercentageOfTotal,
-            noPercentageOfTotal
+            noPercentageOfTotal,
+            blankNullPercentageOfTotal
         };
-    }, [quesito.si, quesito.no, totalAbitanti, quorumPercentage]);
+    }, [quesito.si, quesito.no, quesito.blankNull, totalAbitanti, quorumPercentage]);
 
     // Animazione della percentuale quando cambiano i dati
     useEffect(() => {
@@ -70,7 +74,7 @@ const QuorumPieChart: React.FC<QuorumPieChartProps> = ({
             controls.stop();
             clearTimeout(animationTimer);
         };
-    }, [quesito.si, quesito.no, calculations.participationPercentage, animatedPercentage]);
+    }, [quesito.si, quesito.no, quesito.blankNull, calculations.participationPercentage, animatedPercentage]);
 
     const radius = 120;
     const centerX = 150;
@@ -80,6 +84,7 @@ const QuorumPieChart: React.FC<QuorumPieChartProps> = ({
 
     const siLength = (calculations.siPercentageOfTotal / 100) * circumference;
     const noLength = (calculations.noPercentageOfTotal / 100) * circumference;
+    const blankNullLength = (calculations.blankNullPercentageOfTotal / 100) * circumference;
 
     // Calcola la posizione della linea del quorum
     const quorumAngle = (quorumPercentage / 100) * 2 * Math.PI - Math.PI / 2;
@@ -87,11 +92,8 @@ const QuorumPieChart: React.FC<QuorumPieChartProps> = ({
     const quorumY2 = centerY + (radius + strokeWidth / 2 + 15) * Math.sin(quorumAngle);
 
     // Calcola la posizione del testo con più offset
-    const labelOffset = 15; // Aumentato da 5 a 15 per più spazio
+    const labelOffset = 15;
     const isLeftSide = quorumX2 < centerX;
-
-
-
 
     // Varianti di animazione
     const chartVariants = {
@@ -121,11 +123,11 @@ const QuorumPieChart: React.FC<QuorumPieChartProps> = ({
             <div className="chart-wrapper">
                 <motion.svg
                     className="quorum-pie-chart"
-                    viewBox="0 0 300 340"  // Aumenta solo l'altezza da 300 a 340
+                    viewBox="0 0 300 340"
                     variants={chartVariants}
                     initial="hidden"
                     animate="visible"
-                    style={{ width: '300px', height: '340px' }}  // Mantieni le proporzioni
+                    style={{ width: '300px', height: '340px' }}
                 >
                     {/* Cerchio di sfondo con animazione */}
                     <motion.circle
@@ -198,6 +200,36 @@ const QuorumPieChart: React.FC<QuorumPieChartProps> = ({
                                         ease: [0.43, 0.13, 0.23, 0.96],
                                         delay: 0.5,
                                         strokeWidth: { duration: 0.5, delay: 0.5 }
+                                    }}
+                                />
+                            )}
+
+                            {/* Arco per BIANCHE/NULLE con effetto di disegno ritardato */}
+                            {calculations.blankNullPercentageOfTotal > 0 && (
+                                <motion.circle
+                                    key={`blank-${key}-${calculations.blankNullPercentageOfTotal}`}
+                                    cx={centerX}
+                                    cy={centerY}
+                                    r={radius}
+                                    fill="none"
+                                    stroke="#3b82f6"
+                                    strokeWidth={strokeWidth}
+                                    strokeDasharray={`0 ${siLength + noLength} ${blankNullLength} ${circumference}`}
+                                    initial={{
+                                        strokeDasharray: `0 ${siLength + noLength} 0 ${circumference}`,
+                                        opacity: 0,
+                                        strokeWidth: 0
+                                    }}
+                                    animate={{
+                                        strokeDasharray: `0 ${siLength + noLength} ${blankNullLength} ${circumference}`,
+                                        opacity: 1,
+                                        strokeWidth: strokeWidth
+                                    }}
+                                    transition={{
+                                        duration: 1.5,
+                                        ease: [0.43, 0.13, 0.23, 0.96],
+                                        delay: 1,
+                                        strokeWidth: { duration: 0.5, delay: 1 }
                                     }}
                                 />
                             )}
@@ -315,7 +347,7 @@ const QuorumPieChart: React.FC<QuorumPieChartProps> = ({
                             >
                                 {quesito.si.toLocaleString('it-IT')}
                             </motion.span>
-                            <span className="legend-percentage">{calculations.siPercentage.toFixed(1)}%</span>
+                            <span className="legend-percentage">{calculations.siPercentage.toFixed(1)}% del totale dei voti</span>
                         </div>
                     </motion.div>
 
@@ -344,7 +376,36 @@ const QuorumPieChart: React.FC<QuorumPieChartProps> = ({
                             >
                                 {quesito.no.toLocaleString('it-IT')}
                             </motion.span>
-                            <span className="legend-percentage">{calculations.noPercentage.toFixed(1)}%</span>
+                            <span className="legend-percentage">{calculations.noPercentage.toFixed(1)}% del totale dei voti</span>
+                        </div>
+                    </motion.div>
+
+                    <motion.div
+                        className="legend-item blank-null"
+                        initial={{ x: 20, opacity: 0 }}
+                        animate={{ x: 0, opacity: 1 }}
+                        transition={{ delay: 1.0 }}
+                        whileHover={{ scale: 1.05 }}
+                    >
+                        <motion.div
+                            className="legend-color"
+                            style={{ backgroundColor: '#3b82f6' }}  // Cambiato da grigio a blu
+                            initial={{ scale: 0 }}
+                            animate={{ scale: 1 }}
+                            transition={{ delay: 1.1, type: "spring" }}
+                        />
+                        <div className="legend-info">
+                            <span className="legend-label">BIANCHE/NULLE</span>
+                            <motion.span
+                                className="legend-value"
+                                key={`blank-value-${quesito.blankNull}`}
+                                initial={{ scale: 1.5, color: '#9ca3af' }}
+                                animate={{ scale: 1, color: '#000' }}
+                                transition={{ duration: 0.5 }}
+                            >
+
+                            </motion.span>
+                            <span className="legend-percentage">{calculations.blankNullPercentage.toFixed(1)}% del totale dei voti</span>
                         </div>
                     </motion.div>
 
@@ -352,14 +413,14 @@ const QuorumPieChart: React.FC<QuorumPieChartProps> = ({
                         className="legend-divider"
                         initial={{ scaleX: 0 }}
                         animate={{ scaleX: 1 }}
-                        transition={{ delay: 1, duration: 0.5 }}
+                        transition={{ delay: 1.2, duration: 0.5 }}
                     />
 
                     <motion.div
                         className="legend-item total"
                         initial={{ x: 20, opacity: 0 }}
                         animate={{ x: 0, opacity: 1 }}
-                        transition={{ delay: 1.2 }}
+                        transition={{ delay: 1.4 }}
                         whileHover={{ scale: 1.05 }}
                     >
                         <div className="legend-info">
@@ -381,11 +442,24 @@ const QuorumPieChart: React.FC<QuorumPieChartProps> = ({
                         className="legend-item non-votanti"
                         initial={{ x: 20, opacity: 0 }}
                         animate={{ x: 0, opacity: 1 }}
-                        transition={{ delay: 1.4 }}
+                        transition={{ delay: 1.6 }}
                         whileHover={{ scale: 1.05 }}
                     >
-
-
+                        <div className="legend-info">
+                            <span className="legend-label">Non votanti</span>
+                            <motion.span
+                                className="legend-value"
+                                key={`non-votanti-${totalAbitanti - calculations.totalVotes}`}
+                                initial={{ scale: 1.2 }}
+                                animate={{ scale: 1 }}
+                                transition={{ duration: 0.3 }}
+                            >
+                                {(totalAbitanti - calculations.totalVotes).toLocaleString('it-IT')}
+                            </motion.span>
+                            <span className="legend-percentage">
+                                {((totalAbitanti - calculations.totalVotes) / totalAbitanti * 100).toFixed(1)}%
+                            </span>
+                        </div>
                     </motion.div>
                 </motion.div>
             </div>

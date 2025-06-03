@@ -18,9 +18,10 @@ const BarChartByQuestion: React.FC<BarChartByQuestionProps> = ({
     onQuesitoChange
 }) => {
     const quesito = data[currentQuesito - 1];
-    const totalVotes = quesito.si + quesito.no;
+    const totalVotes = quesito.si + quesito.no + quesito.blankNull;
     const siPercentage = totalVotes > 0 ? (quesito.si / totalVotes) * 100 : 0;
     const noPercentage = totalVotes > 0 ? (quesito.no / totalVotes) * 100 : 0;
+    const blankNullPercentage = totalVotes > 0 ? (quesito.blankNull / totalVotes) * 100 : 0;
 
     const bars = [
         {
@@ -38,6 +39,14 @@ const BarChartByQuestion: React.FC<BarChartByQuestionProps> = ({
             percentage: noPercentage,
             color: '#ef4444',
             image: '/images/yes-no/no.png'
+        },
+        {
+            id: 'Bianche - Nulle',
+            label: 'N/A',
+            value: quesito.blankNull,
+            percentage: blankNullPercentage,
+            color: '#3b82f6',
+            image: '/images/yes-no/blank.png'
         }
     ].sort((a, b) => b.value - a.value);
 
