@@ -42,7 +42,7 @@ const BarChartByQuestion: React.FC<BarChartByQuestionProps> = ({
         },
         {
             id: 'Bianche - Nulle',
-            label: 'N/A',
+            label: 'B/N',
             value: quesito.blankNull,
             percentage: blankNullPercentage,
             color: '#3b82f6',
