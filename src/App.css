@@ -556,52 +556,6 @@ body {
   }
 }
 
-/* Dark mode support */
-@media (prefers-color-scheme: dark) {
-  body {
-    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-  }
-  
-  .fixed-header {
-    background: rgba(26, 26, 46, 0.95);
-  }
-  
-  .header-title,
-  .header-subtitle {
-    filter: brightness(1.2);
-  }
-  
-  .fixed-header .menu-item {
-    background: rgba(129, 140, 248, 0.1);
-    color: #818cf8;
-  }
-  .fixed-header .menu-item:hover {
-    background: rgba(129, 140, 248, 0.2);
-  }
-  
-  .fixed-header .menu-item.active {
-    background: #818cf8;
-    color: #1a1a2e;
-  }
-  
-  .app {
-    background: rgba(26, 26, 46, 0.95);
-    color: #e5e5e5;
-  }
-  
-  .title {
-    color: #e5e5e5;
-  }
-  
-  .menu-item {
-    color: #aaa;
-  }
-  
-  .menu-item.active {
-    background: rgba(129, 140, 248, 0.2);
-    color: #818cf8;
-  }
-}
 
 /* Utility classes */
 .text-center {
