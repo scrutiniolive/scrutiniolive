@@ -1,0 +1,259 @@
+/* components/LaunchBanner/LaunchBanner.css */
+.launch-banner {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 15px 0;
+    z-index: 1000;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.launch-banner-content {
+    max-width: 100%;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Centra tutto */
+    position: relative;
+    padding: 0 60px; /* Padding uguale su entrambi i lati per bilanciare */
+}
+
+.launch-banner-main {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 30px; /* Aumentato per più spazio tra testo e countdown */
+    flex: 1;
+    max-width: 1200px;
+}
+
+.launch-banner-text {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    white-space: nowrap; /* Impedisce il wrap del testo */
+}
+
+.launch-emoji {
+    font-size: 24px;
+    animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+.launch-title {
+    font-size: 20px; /* Aumentato per bilanciare con i counter */
+    font-weight: 600;
+}
+
+.countdown-container {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Aumentato leggermente */
+    font-family: 'Monaco', 'Courier New', monospace;
+}
+
+.countdown-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 45px; /* Ridotto leggermente */
+}
+
+.countdown-value {
+    font-size: 24px; /* Ridotto per bilanciare con il testo */
+    font-weight: 700;
+    line-height: 1;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 6px 10px;
+    border-radius: 8px;
+    backdrop-filter: blur(10px);
+}
+
+.countdown-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    margin-top: 5px;
+    opacity: 0.9;
+}
+
+.countdown-separator {
+    font-size: 20px; /* Ridotto per bilanciare */
+    font-weight: 700;
+    margin: 0 2px;
+    align-self: flex-start;
+    padding-top: 6px;
+}
+
+.launch-banner-close {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    opacity: 0.9;
+}
+
+.launch-banner-close:hover {
+    background: rgba(255, 255, 255, 0.3);
+    opacity: 1;
+    transform: translateY(-50%) rotate(90deg);
+}
+
+/* Responsive - Tablet */
+@media (max-width: 768px) {
+    .launch-banner {
+        padding: 12px 0;
+    }
+
+    .launch-banner-content {
+        padding: 0 50px; /* Ridotto per mobile */
+    }
+
+    .launch-banner-main {
+        flex-direction: column;
+        gap: 12px;
+        text-align: center;
+    }
+
+    .launch-title {
+        font-size: 18px;
+    }
+
+    .countdown-value {
+        font-size: 20px;
+        padding: 5px 8px;
+    }
+
+    .countdown-item {
+        min-width: 38px;
+    }
+
+    .countdown-separator {
+        font-size: 18px;
+        padding-top: 5px;
+    }
+
+    .launch-banner-close {
+        right: 15px;
+        width: 28px;
+        height: 28px;
+        font-size: 20px;
+    }
+}
+
+/* Responsive - Mobile */
+@media (max-width: 480px) {
+    .launch-banner {
+        padding: 10px 0;
+    }
+
+    .launch-banner-content {
+        padding: 0 45px;
+    }
+
+    .launch-banner-main {
+        gap: 10px;
+    }
+
+    .launch-emoji {
+        font-size: 20px;
+    }
+
+    .launch-title {
+        font-size: 16px;
+    }
+
+    .countdown-container {
+        gap: 4px;
+    }
+
+    .countdown-value {
+        font-size: 18px;
+        padding: 4px 6px;
+    }
+
+    .countdown-item {
+        min-width: 32px;
+    }
+
+    .countdown-label {
+        font-size: 9px;
+    }
+
+    .countdown-separator {
+        font-size: 16px;
+        margin: 0 1px;
+    }
+
+    .launch-banner-close {
+        right: 10px;
+        width: 26px;
+        height: 26px;
+        font-size: 18px;
+    }
+}
+
+/* Responsive - Mobile Extra Small */
+@media (max-width: 360px) {
+    .launch-banner-content {
+        padding: 0 40px;
+    }
+
+    .launch-title {
+        font-size: 14px;
+    }
+
+    .countdown-value {
+        font-size: 16px;
+        padding: 3px 5px;
+    }
+
+    .countdown-item {
+        min-width: 28px;
+    }
+
+    .countdown-label {
+        font-size: 8px;
+    }
+}
+
+/* Animazioni per desktop con mouse */
+@media (hover: hover) {
+    .launch-banner-close:hover {
+        background: rgba(255, 255, 255, 0.3);
+        transform: translateY(-50%) rotate(90deg) scale(1.1);
+    }
+}
+
+/* Rimuovi animazioni per chi preferisce */
+@media (prefers-reduced-motion: reduce) {
+    .launch-emoji {
+        animation: none;
+    }
+    
+    .launch-banner-close {
+        transition: none;
+    }
+}

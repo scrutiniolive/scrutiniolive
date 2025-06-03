@@ -1,15 +1,19 @@
 /* QuorumPieChart.css */
 
 /* Aggiungi padding solo al bottom del container principale */
+/* In QuorumPieChart.css */
 .quorum-chart-container {
     position: relative;
-    overflow: visible;  /* Cambia da hidden a visible */
+    overflow-x: hidden;  /* Nasconde l'overflow orizzontale */
+    overflow-y: visible; /* Mantiene visibile quello verticale per la linea del quorum */
     padding: 20px;
-    padding-bottom: 40px;  /* Più spazio in basso */
+    padding-bottom: 40px;
     background: white;
     border-radius: 12px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
+
+
 
 .quesito-title {
     font-size: 1.5rem;
@@ -25,7 +29,8 @@
     justify-content: center;
     gap: 40px;
     margin-bottom: 30px;
-    overflow: visible;  /* Importante per non tagliare la linea */
+    overflow: visible;
+    position: relative;  /* Aggiunto per contenere gli elementi animati */
 }
 
 /* Aggiungi al tuo QuorumPieChart.css */

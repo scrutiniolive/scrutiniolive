@@ -3,6 +3,7 @@ import { AnimatePresence } from 'framer-motion';
 import Menu from './components/Menu/Menu';
 import Home from './pages/Home/Home';
 import HomeMock from './pages/HomeMock/HomeMock';
+import LaunchBanner from './components/LaunchBanner/LaunchBanner';
 
 import Credits from './pages/Credits/Credits';
 import FAQ from './pages/FAQ/FAQ';
@@ -14,14 +15,14 @@ import './App.css';
 
 
 function App() {
-
+    const launchDate = new Date('2025-06-09T12:00:00+02:00');
 
     const [currentSection, setCurrentSection] = useState<MenuSection>('home');
 
     const renderSection = () => {
         switch (currentSection) {
             case 'home':
-                return <Home />;
+                return <HomeMock />;
             case 'credits':
                 return <Credits />;
             case 'faq':
@@ -33,6 +34,9 @@ function App() {
         }
     };
 
+
+
+    // Nel tuo componente App
     return (
         <div className="app-wrapper">
             {/* Header fisso */}
@@ -56,7 +60,7 @@ function App() {
                 </div>
             </header>
 
-            {/* Contenuto principale con padding per il header */}
+            {/* Contenuto principale */}
             <main className="main-content">
                 <div className="app">
                     <AnimatePresence mode="wait">
@@ -64,8 +68,13 @@ function App() {
                     </AnimatePresence>
                 </div>
             </main>
+
+            {/* Launch Banner in basso */}
+            <LaunchBanner
+                targetDate={new Date('2025-06-09T15:30:00')}
+                onClose={() => console.log('Banner chiuso')}
+            />
         </div>
     );
 }
-
 export default App;

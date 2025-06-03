@@ -52,7 +52,7 @@ body {
 .header-content {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 15px 20px;
+  padding: 12px 20px; /* Ridotto da 15px a 12px */
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -146,10 +146,10 @@ body {
 
 /* Contenuto principale */
 .main-content {
-  padding-top: 90px;
+  padding-top: 90px; /* Ridotto da 80px a 60px */
   min-height: 100vh;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   padding-left: 20px;
   padding-right: 20px;
@@ -812,4 +812,8 @@ body {
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
+}
+
+.with-launch-banner .main-content {
+    padding-bottom: 100px; /* Spazio per il banner in basso */
 }
