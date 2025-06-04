@@ -87,17 +87,21 @@ const Credits: React.FC = () => {
                             rendendo i risultati elettorali trasparenti e accessibili a tutti.
                         </p>
                         <p className="highlight-text">
-                            <strong>Prima tappa: Paola (CS)</strong>
+                            <strong>✅ Prima Tappa: Elezioni Comunali Paola (CS)</strong>
+                        </p>
+                        <p className="highlight-text">
+                            <strong>🔜 Seconda Tappa: Referendum 8-9 Giugno 2025 Paola (CS)</strong>
                         </p>
                     </div>
 
                     <div className="credit-card-half">
                         <h3>✅ Funzionalità</h3>
                         <ul>
-                            <li>Aggiornamenti in tempo reale</li>
-                            <li>Grafici dettagliati</li>
-                            <li>Analisi dei flussi di voto</li>
-                            <li>Proiezioni Consiglio Comunale</li>
+                            <li>🔴 Aggiornamenti live dai seggi elettorali</li>
+                            <li>📊 Dashboard con grafici interattivi</li>
+                            <li>📈 Analisi dei trend e flussi di voto</li>
+                            <li>🎯 Proiezioni basate sui dati reali</li>
+                            <li>💎 UI/UX completamente ridisegnata</li>
                         </ul>
                     </div>
                 </div>

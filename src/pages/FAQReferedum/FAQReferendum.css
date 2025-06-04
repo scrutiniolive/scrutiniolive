@@ -1,9 +1,21 @@
+/* Global box-sizing fix */
+* {
+  box-sizing: border-box;
+}
+
 /* Container principale */
 .faq-referendum-container {
   width: 100%;
   max-width: 100%;
   margin: 0;
-  padding: 0;
+  padding: 0 15px;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+/* Assicurati che tutti gli elementi rispettino il box-sizing */
+.faq-referendum-container * {
+  box-sizing: border-box;
 }
 
 /* Titolo principale */
@@ -25,6 +37,9 @@
   margin: 0 0 30px 0;
   text-align: center;
   box-shadow: 0 4px 15px rgba(102, 126, 234, 0.1);
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .faq-referendum-intro h2 {
@@ -53,6 +68,9 @@
   display: flex;
   flex-direction: column;
   gap: 15px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .info-row {
@@ -90,6 +108,9 @@
   padding: 30px;
   margin: 0 0 40px 0;
   border-left: 5px solid #667eea;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .faq-referendum-quesiti-summary h3 {
@@ -130,6 +151,9 @@
   padding: 25px;
   transition: all 0.3s ease;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .faq-referendum-item:hover {
@@ -162,6 +186,9 @@
   padding: 30px;
   margin: 0;
   text-align: center;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .faq-referendum-notice h3 {
@@ -215,15 +242,26 @@
   font-weight: 700;
 }
 
+.notice-footer a {
+  word-break: break-all;
+  display: inline-block;
+  max-width: 100%;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
+  .faq-referendum-container {
+    padding: 0 10px;
+  }
+  
   .faq-referendum-title {
     font-size: 1.8rem;
     margin-bottom: 25px;
   }
   
   .faq-referendum-intro {
-    padding: 25px 20px;
+    padding: 20px 15px;
+    margin: 0 0 20px 0;
   }
   
   .faq-referendum-intro h2 {
@@ -235,7 +273,8 @@
   }
   
   .faq-referendum-info-banner {
-    padding: 20px;
+    padding: 20px 15px;
+    margin: 0 0 20px 0;
   }
   
   .info-icon {
@@ -252,7 +291,7 @@
   }
   
   .faq-referendum-quesiti-summary {
-    padding: 20px;
+    padding: 20px 15px;
   }
   
   .faq-referendum-quesiti-summary h3 {
@@ -269,7 +308,7 @@
   }
   
   .faq-referendum-item {
-    padding: 20px;
+    padding: 20px 15px;
   }
   
   .faq-referendum-question {
@@ -282,7 +321,7 @@
   }
   
   .faq-referendum-notice {
-    padding: 25px 20px;
+    padding: 20px 15px;
   }
   
   .faq-referendum-notice h3 {
@@ -295,12 +334,16 @@
 }
 
 @media (max-width: 480px) {
+  .faq-referendum-container {
+    padding: 0 8px;
+  }
+  
   .faq-referendum-title {
     font-size: 1.5rem;
   }
   
   .faq-referendum-intro {
-    padding: 20px 15px;
+    padding: 15px 10px;
   }
   
   .faq-referendum-intro h2 {
@@ -308,7 +351,7 @@
   }
   
   .faq-referendum-info-banner {
-    padding: 15px;
+    padding: 15px 10px;
     gap: 12px;
   }
   
@@ -317,15 +360,31 @@
   }
   
   .faq-referendum-quesiti-summary {
-    padding: 15px;
+    padding: 15px 10px;
+  }
+  
+  .faq-referendum-quesiti-list {
+    padding-left: 15px;
   }
   
   .faq-referendum-item {
-    padding: 15px;
+    padding: 15px 10px;
   }
   
   .faq-referendum-answer {
-    padding-left: 20px;
+    padding-left: 15px;
+  }
+  
+  .faq-referendum-notice {
+    padding: 15px 10px;
+  }
+  
+  .notice-footer {
+    font-size: 0.85rem;
+  }
+  
+  .notice-footer strong {
+    word-break: break-all;
   }
 }
 
@@ -373,4 +432,3 @@
   outline: 3px solid #667eea;
   outline-offset: 2px;
 }
-

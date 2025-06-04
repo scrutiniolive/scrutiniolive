@@ -203,7 +203,7 @@ const Home: React.FC = () => {
         intervalRef.current = window.setInterval(() => {
             console.log('⏰ Tick automatico');
             automaticUpdate();
-        }, 30000);
+        }, 60000);
         console.log('✅ Intervallo creato:', intervalRef.current);
     }, [automaticUpdate]); // Rimuovi isLive dalle dipendenze
 
