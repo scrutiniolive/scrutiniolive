@@ -408,7 +408,7 @@ const QuorumPieChart: React.FC<QuorumPieChartProps> = ({
                                 animate={{ scale: 1, color: '#000' }}
                                 transition={{ duration: 0.5 }}
                             >
-
+                                {quesito.blankNull.toLocaleString('it-IT')}
                             </motion.span>
                             <span className="legend-percentage">{calculations.blankNullPercentage.toFixed(1)}% del totale dei voti</span>
                         </div>
