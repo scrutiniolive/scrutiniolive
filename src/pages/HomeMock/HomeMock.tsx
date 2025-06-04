@@ -485,7 +485,7 @@ const HomeMock: React.FC = () => {
                 <div>
                     Simulazione: {quorumPercentage}% quorum richiesto |
                     Affluenza attuale: {((referendumData.reduce((acc, q) => acc + q.si + q.no + q.blankNull, 0) / totalAbitanti) * 100).toFixed(1)}% |
-                    {isLive ? ' Aggiornamento automatico ogni 5 secondi' : ' Votazione conclusa'}
+                    {isLive ? ' Aggiornamento automatico ogni 30 secondi' : ' Votazione conclusa'}
                 </div>
                 <div style={{ marginTop: '5px' }}>
                     Totale voti: {referendumData.reduce((acc, q) => acc + q.si + q.no + q.blankNull, 0).toLocaleString('it-IT')} su {totalAbitanti.toLocaleString('it-IT')} aventi diritto

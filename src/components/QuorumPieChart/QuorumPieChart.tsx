@@ -31,8 +31,14 @@ const QuorumPieChart: React.FC<QuorumPieChartProps> = ({
 
     const calculations = useMemo(() => {
         const totalVotes = quesito.si + quesito.no + quesito.blankNull;
+
         const participationPercentage = totalVotes > 0 ? (totalVotes / totalAbitanti) * 100 : 0;
-        const quorumReached = participationPercentage >= quorumPercentage;
+
+        // Calcola la percentuale esatta necessaria per il quorum (50% + 1 voto)
+        const exactQuorumPercentage = ((Math.floor(totalAbitanti * 0.5) + 1) / totalAbitanti) * 100;
+
+        // Verifica se il quorum è raggiunto
+        const quorumReached = participationPercentage >= exactQuorumPercentage;
 
         const siPercentageOfTotal = (quesito.si / totalAbitanti) * 100;
         const noPercentageOfTotal = (quesito.no / totalAbitanti) * 100;
@@ -51,7 +57,8 @@ const QuorumPieChart: React.FC<QuorumPieChartProps> = ({
             blankNullPercentage,
             siPercentageOfTotal,
             noPercentageOfTotal,
-            blankNullPercentageOfTotal
+            blankNullPercentageOfTotal,
+            exactQuorumPercentage
         };
     }, [quesito.si, quesito.no, quesito.blankNull, totalAbitanti, quorumPercentage]);
 
@@ -87,13 +94,12 @@ const QuorumPieChart: React.FC<QuorumPieChartProps> = ({
     const blankNullLength = (calculations.blankNullPercentageOfTotal / 100) * circumference;
 
     // Calcola la posizione della linea del quorum
-    const quorumAngle = (quorumPercentage / 100) * 2 * Math.PI - Math.PI / 2;
+    const quorumAngle = (calculations.exactQuorumPercentage / 100) * 2 * Math.PI - Math.PI / 2;
     const quorumX2 = centerX + (radius + strokeWidth / 2 + 15) * Math.cos(quorumAngle);
     const quorumY2 = centerY + (radius + strokeWidth / 2 + 15) * Math.sin(quorumAngle);
 
     // Calcola la posizione del testo con più offset
     const labelOffset = 15;
-    const isLeftSide = quorumX2 < centerX;
 
     // Varianti di animazione
     const chartVariants = {
@@ -267,7 +273,7 @@ const QuorumPieChart: React.FC<QuorumPieChartProps> = ({
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ delay: 1.5, duration: 0.5 }}
                     >
-                        Quorum {quorumPercentage}%
+                        Quorum {quorumPercentage}% + 1
                     </motion.text>
 
                     {/* Centro con percentuale di partecipazione */}
