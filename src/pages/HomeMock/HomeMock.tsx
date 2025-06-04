@@ -19,12 +19,14 @@ const QUESITO_COLORS: { [key: number]: string } = {
 // Simulatore di dati
 class DataSimulator {
     private baseData: VoteData[] = [
-        { id: 1, name: 'Cittadinanza: dimezzamento da 10 a 5 anni', si: 0, no: 0, blankNull: 0, color: QUESITO_COLORS[1] },
-        { id: 2, name: 'Cannabis: depenalizzazione coltivazione domestica', si: 0, no: 0, blankNull: 0, color: QUESITO_COLORS[2] },
-        { id: 3, name: 'Eutanasia: introduzione del "rifiuto delle cure"', si: 0, no: 0, blankNull: 0, color: QUESITO_COLORS[3] },
-        { id: 4, name: 'Giustizia: separazione delle carriere', si: 0, no: 0, blankNull: 0, color: QUESITO_COLORS[4] },
-        { id: 5, name: 'Giustizia: limiti alla custodia cautelare', si: 0, no: 0, blankNull: 0, color: QUESITO_COLORS[5] }
+        { id: 1, name: 'Reintegro lavoratori - Superamento del Jobs Act', si: 0, no: 0, blankNull: 0, color: QUESITO_COLORS[1] },
+        { id: 2, name: 'Piccole imprese - Eliminazione tetto risarcimenti', si: 0, no: 0, blankNull: 0, color: QUESITO_COLORS[2] },
+        { id: 3, name: 'Contratti a termine - Obbligo di causale', si: 0, no: 0, blankNull: 0, color: QUESITO_COLORS[3] },
+        { id: 4, name: 'Sicurezza appalti - Maggiore responsabilità committenti', si: 0, no: 0, blankNull: 0, color: QUESITO_COLORS[4] },
+        { id: 5, name: 'Cittadinanza - Da 10 a 5 anni di residenza', si: 0, no: 0, blankNull: 0, color: QUESITO_COLORS[5] }
     ];
+
+
 
     private votingProgress = 0;
     private totalPeople = 15182;
