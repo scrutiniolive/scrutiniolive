@@ -15,14 +15,14 @@ import './App.css';
 
 
 function App() {
-    const launchDate = new Date('2025-06-09T12:00:00+02:00');
+
 
     const [currentSection, setCurrentSection] = useState<MenuSection>('home');
 
     const renderSection = () => {
         switch (currentSection) {
             case 'home':
-                return <HomeMock />;
+                return <Home />;
             case 'credits':
                 return <Credits />;
             case 'faq':

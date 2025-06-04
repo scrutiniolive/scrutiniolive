@@ -14,7 +14,6 @@ interface QuorumPieChartProps {
 const QuorumPieChart: React.FC<QuorumPieChartProps> = ({
     data,
     totalAbitanti,
-    quorumPercentage,
     currentQuesito,
     onQuesitoChange
 }) => {
@@ -60,7 +59,7 @@ const QuorumPieChart: React.FC<QuorumPieChartProps> = ({
             blankNullPercentageOfTotal,
             exactQuorumPercentage
         };
-    }, [quesito.si, quesito.no, quesito.blankNull, totalAbitanti, quorumPercentage]);
+    }, [quesito.si, quesito.no, quesito.blankNull, totalAbitanti]);
 
     // Animazione della percentuale quando cambiano i dati
     useEffect(() => {
@@ -273,7 +272,7 @@ const QuorumPieChart: React.FC<QuorumPieChartProps> = ({
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ delay: 1.5, duration: 0.5 }}
                     >
-                        Quorum {quorumPercentage}% + 1
+                        Quorum 50% + 1
                     </motion.text>
 
                     {/* Centro con percentuale di partecipazione */}
