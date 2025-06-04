@@ -12,6 +12,7 @@
         "predeploy": "npm run build",
         "deploy": "gh-pages -d dist",
         "deploy:google": "vite build --mode google && gh-pages -d dist",
+        "deploy:aws": "vite build --mode aws && gh-pages -d dist",
         "generate-api": "openapi-generator-cli generate -i http://localhost:8080/v3/api-docs -g typescript-fetch -o ./src/api/generated --skip-validate-spec --additional-properties=supportsES6=true,npmName=referendum-api,typescriptThreePlus=true",
         "generate-api:clean": "rm -rf ./src/api/generated && npm run generate-api"
     },
