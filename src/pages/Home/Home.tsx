@@ -87,7 +87,7 @@ const Home: React.FC = () => {
         setBarData(createBarData(mappedData));
         setRadarData(createRadarData(mappedData));
         setQuorumPercentage(votersInfo.turnoutPercentage || 0);
-        setTotalAbitanti(15000);
+        setTotalAbitanti(votersInfo.totalPeople || 0);
 
         // Incrementa updateKey per forzare il refresh
         setUpdateKey(prev => prev + 1);

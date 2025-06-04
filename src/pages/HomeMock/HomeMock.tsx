@@ -27,7 +27,7 @@ class DataSimulator {
     ];
 
     private votingProgress = 0;
-    private totalPeople = 15000;
+    private totalPeople = 15182;
 
     constructor() {
         // Inizializza con alcuni voti casuali includendo blankNull
